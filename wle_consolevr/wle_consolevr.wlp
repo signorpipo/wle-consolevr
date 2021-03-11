@@ -4,10 +4,7 @@
             "name": "Player",
             "components": [
                 {
-                    "type": "wasd-controls",
-                    "wasd-controls": {
-                        "headObject": "17"
-                    }
+                    "type": "gamepads-manager"
                 }
             ],
             "transformation": [
@@ -252,6 +249,141 @@
                 1.0
             ],
             "deleted": true
+        },
+        "48": {
+            "link": {
+                "name": "Left_Quest_Controller",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            },
+            "parent": "14",
+            "components": [
+                {
+                    "type": "input",
+                    "input": {
+                        "type": "hand left"
+                    }
+                },
+                {
+                    "type": "gamepad-animator",
+                    "gamepad-animator": {
+                        "_mySelect": "52",
+                        "_mySqueeze": "53",
+                        "_myThumbstick": "54",
+                        "_myBottomButton": "50",
+                        "_myTopButton": "55"
+                    }
+                }
+            ]
+        },
+        "49": {
+            "link": {
+                "name": "Left_Body<Left_Quest_Controller",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "50": {
+            "link": {
+                "name": "Left_Bottom_Button<Left_Quest_Controller",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "51": {
+            "link": {
+                "name": "Left_Option_Button<Left_Quest_Controller",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "52": {
+            "link": {
+                "name": "Left_Select<Left_Quest_Controller",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "53": {
+            "link": {
+                "name": "Left_Squeeze<Left_Quest_Controller",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "54": {
+            "link": {
+                "name": "Left_Thumbstick<Left_Quest_Controller",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "55": {
+            "link": {
+                "name": "Left_Top_Button<Left_Quest_Controller",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "56": {
+            "link": {
+                "name": "Right_Quest_Controller",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            },
+            "parent": "14",
+            "components": [
+                {
+                    "type": "input",
+                    "input": {
+                        "type": "hand right"
+                    }
+                },
+                {
+                    "type": "gamepad-animator",
+                    "gamepad-animator": {
+                        "_myHandedness": "right",
+                        "_mySelect": "60",
+                        "_mySqueeze": "61",
+                        "_myThumbstick": "62",
+                        "_myBottomButton": "58",
+                        "_myTopButton": "63"
+                    }
+                }
+            ]
+        },
+        "57": {
+            "link": {
+                "name": "Right_Body<Right_Quest_Controller",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "58": {
+            "link": {
+                "name": "Right_Bottom_Button<Right_Quest_Controller",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "59": {
+            "link": {
+                "name": "Right_Option_Button<Right_Quest_Controller",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "60": {
+            "link": {
+                "name": "Right_Select<Right_Quest_Controller",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "61": {
+            "link": {
+                "name": "Right_Squeeze<Right_Quest_Controller",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "62": {
+            "link": {
+                "name": "Right_Thumbstick<Right_Quest_Controller",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "63": {
+            "link": {
+                "name": "Right_Top_Button<Right_Quest_Controller",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
         }
     },
     "meshes": {
@@ -289,6 +421,90 @@
             "link": {
                 "name": "PrimitiveCircle",
                 "file": "default"
+            }
+        },
+        "34": {
+            "link": {
+                "name": "Mesh",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "35": {
+            "link": {
+                "name": "Mesh.002",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "36": {
+            "link": {
+                "name": "Mesh.003",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "37": {
+            "link": {
+                "name": "Mesh.005",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "38": {
+            "link": {
+                "name": "Mesh.006",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "39": {
+            "link": {
+                "name": "Mesh.004",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "40": {
+            "link": {
+                "name": "Mesh.001",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "41": {
+            "link": {
+                "name": "Mesh.007",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "42": {
+            "link": {
+                "name": "Mesh.009",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "43": {
+            "link": {
+                "name": "Mesh.010",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "44": {
+            "link": {
+                "name": "Mesh.012",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "45": {
+            "link": {
+                "name": "Mesh.013",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "46": {
+            "link": {
+                "name": "Mesh.011",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "47": {
+            "link": {
+                "name": "Mesh.008",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
             }
         }
     },
@@ -391,6 +607,18 @@
                     1.0
                 ]
             }
+        },
+        "32": {
+            "link": {
+                "name": "Lambert_Body",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
+        },
+        "33": {
+            "link": {
+                "name": "Lambert_Button",
+                "file": "assets\\quest_controllers_credits_Jezza3D.glb"
+            }
         }
     },
     "shaders": {
@@ -471,7 +699,8 @@
         "scripting": {
             "sourcePaths": [
                 "/js/components/",
-                "js/"
+                "js/pp",
+                "js/import"
             ]
         },
         "editor": {
@@ -481,5 +710,8 @@
         }
     },
     "animations": {},
-    "skins": {}
+    "skins": {},
+    "files": [
+        "assets/quest_controllers_credits_Jezza3D.glb"
+    ]
 }
