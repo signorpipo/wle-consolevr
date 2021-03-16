@@ -11,9 +11,9 @@ WL.registerComponent('gamepad-animator', {
 }, {
     init: function () {
         if (this._myHandedness == 0) {
-            this._myGamepad = LeftGamepad; //@EDIT get gamepad LEFT here based on how you store it in your game
+            this._myGamepad = PP.LeftGamepad; //@EDIT get gamepad LEFT here based on how you store it in your game
         } else {
-            this._myGamepad = RightGamepad; //@EDIT get gamepad RIGHT here based on how you store it in your game
+            this._myGamepad = PP.RightGamepad; //@EDIT get gamepad RIGHT here based on how you store it in your game
         }
 
         this._myNormalDiffuseButtonColor = null; //@EDIT with the color you want, or leave null to keep the material color, set all color variables or none

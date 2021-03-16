@@ -8,14 +8,14 @@ WL.registerComponent('gamepads-manager', {
     init: function () {
     },
     start: function () {
-        LeftGamepad.start();
-        RightGamepad.start();
+        PP.LeftGamepad.start();
+        PP.RightGamepad.start();
     },
     update: function (dt) {
-        LeftGamepad.update(dt);
-        RightGamepad.update(dt);
+        PP.LeftGamepad.update(dt);
+        PP.RightGamepad.update(dt);
     },
 });
 
-var LeftGamepad = new PP.Gamepad(PP.Handedness.LEFT);
-var RightGamepad = new PP.Gamepad(PP.Handedness.RIGHT);
+PP.LeftGamepad = new PP.Gamepad(PP.Handedness.LEFT);
+PP.RightGamepad = new PP.Gamepad(PP.Handedness.RIGHT);
