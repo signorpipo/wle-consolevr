@@ -1,3 +1,8 @@
+/* Doesn't support
+    - Placeholder like %d and other similar kind of way to build strings
+    - Object to string will result in [Object object]
+*/
+
 PP.ConsoleVR = class ConsoleVR {
 
     constructor(consoleVRComponent) {
@@ -15,95 +20,101 @@ PP.ConsoleVR = class ConsoleVR {
         this._myMaxMessagesDeletePad = 20; // to prevent deleting at every message, delay the delete after the limit is exceed by this value
 
         this._myOldConsole = [];
+
+        this._myTypeFilters = [];
+        for (let key in PP.ConsoleVR.MessageType) {
+            this._myTypeFilters[PP.ConsoleVR.MessageType[key]] = false;
+        }
     }
 
     start() {
-        window.addEventListener('keydown', this.press.bind(this));
-
         this._myOldConsole[PP.ConsoleVR.MessageType.ERROR] = console.error;
         console.error = this._consolePrint.bind(this, PP.ConsoleVR.MessageType.ERROR);
 
         this._myOldConsole[PP.ConsoleVR.MessageType.LOG] = console.log;
         console.log = this._consolePrint.bind(this, PP.ConsoleVR.MessageType.LOG);
 
+        this._myOldConsole[PP.ConsoleVR.MessageType.WARN] = console.warn;
+        console.warn = this._consolePrint.bind(this, PP.ConsoleVR.MessageType.WARN);
+
+        this._myOldConsole[PP.ConsoleVR.MessageType.INFO] = console.info;
+        console.info = this._consolePrint.bind(this, PP.ConsoleVR.MessageType.INFO);
+
         this._myTextComponents = [];
         this._myTextComponents[PP.ConsoleVR.MessageType.LOG] = this._myConsoleVRComponent._myLog.getComponent("text");
         this._myTextComponents[PP.ConsoleVR.MessageType.ERROR] = this._myConsoleVRComponent._myError.getComponent("text");
+        this._myTextComponents[PP.ConsoleVR.MessageType.WARN] = this._myConsoleVRComponent._myWarn.getComponent("text");
+        this._myTextComponents[PP.ConsoleVR.MessageType.INFO] = this._myConsoleVRComponent._myInfo.getComponent("text");
 
         this._myTextComponents[PP.ConsoleVR.MessageType.LOG].material = this._myTextComponents[PP.ConsoleVR.MessageType.LOG].material.clone();
         this._myTextComponents[PP.ConsoleVR.MessageType.LOG].material.color = [1, 1, 1, 1];
         this._myTextComponents[PP.ConsoleVR.MessageType.ERROR].material = this._myTextComponents[PP.ConsoleVR.MessageType.ERROR].material.clone();
         this._myTextComponents[PP.ConsoleVR.MessageType.ERROR].material.color = [1, 0, 0, 1];
-    }
-
-    press() {
-        console.error("Watermelon");
+        this._myTextComponents[PP.ConsoleVR.MessageType.WARN].material = this._myTextComponents[PP.ConsoleVR.MessageType.WARN].material.clone();
+        this._myTextComponents[PP.ConsoleVR.MessageType.WARN].material.color = [1, 1, 0, 1];
+        this._myTextComponents[PP.ConsoleVR.MessageType.INFO].material = this._myTextComponents[PP.ConsoleVR.MessageType.INFO].material.clone();
+        this._myTextComponents[PP.ConsoleVR.MessageType.INFO].material.color = [0, 0, 1, 1];
     }
 
     update(dt) {
-        if (PP.LeftGamepad.getButtonInfo(PP.ButtonType.SELECT).myIsPressed) {
-            console.err4or("Watermelon");
-        }
-        if (PP.LeftGamepad.getButtonInfo(PP.ButtonType.SQUEEZE).myIsPressed && !PP.LeftGamepad.getButtonInfo(PP.ButtonType.SQUEEZE).myIsPrevPressed) {
-            console.error("Watermelon Error");
-        }
-
-        if (PP.RightGamepad.getButtonInfo(PP.ButtonType.SELECT).myIsPressed) {
-            console.log("Watermelon Log");
-        }
-        if (PP.RightGamepad.getButtonInfo(PP.ButtonType.SQUEEZE).myIsPressed && !PP.LeftGamepad.getButtonInfo(PP.ButtonType.SQUEEZE).myIsPrevPressed) {
-            console.log("Archery Log\nasdasdasd\nsdsdsd");
-        }
     }
 
     _updateText(messageType) {
         let consoleText = "";
-        let linesCount = 0;
-        let i = this._myMessages.length - 1;
 
-        while (i >= 0 && linesCount < this._myMaxLines) {
-            let message = this._myMessages[i];
-            let messageLines = message.myLines.length;
+        if (!this._myTypeFilters[messageType]) {
+            let linesCount = 0;
+            let i = this._myMessages.length - 1;
 
-            if (i != this._myMessages.length - 1) {
-                linesCount += 1;
-                consoleText = ("\n").concat(consoleText);
-            }
+            while (i >= 0 && linesCount < this._myMaxLines) {
+                let message = this._myMessages[i];
 
-            if (message.myType == messageType) {
-                if (linesCount + messageLines <= this._myMaxLines) {
-                    consoleText = (message.myText.concat("\n")).concat(consoleText);
-                    linesCount += messageLines;
+                if (this._myTypeFilters[message.myType]) {
+                    i -= 1;
+                    continue;
+                }
+
+                let messageLines = message.myLines.length;
+
+                if (i != this._myMessages.length - 1) {
+                    linesCount += 1;
+                    consoleText = ("\n").concat(consoleText);
+                }
+
+                if (message.myType == messageType) {
+                    if (linesCount + messageLines <= this._myMaxLines) {
+                        consoleText = (message.myText.concat("\n")).concat(consoleText);
+                        linesCount += messageLines;
+                    } else {
+                        let linesToShow = this._myMaxLines - linesCount;
+                        if (linesToShow > 0) {
+                            let lastLines = message.myLines.slice(messageLines - linesToShow);
+
+                            let text = lastLines.join("\n");
+                            consoleText = (text.concat("\n")).concat(consoleText);
+
+                            linesCount += linesToShow;
+                        }
+                    }
                 } else {
-                    let linesToShow = this._myMaxLines - linesCount;
-                    if (linesToShow > 0) {
-                        let lastLines = message.myLines.slice(messageLines - linesToShow);
+                    if (linesCount + messageLines <= this._myMaxLines) {
+                        for (let j = 0; j < messageLines; j++) {
+                            consoleText = ("\n").concat(consoleText);
+                        }
+                        linesCount += messageLines;
+                    } else {
+                        let linesToShow = this._myMaxLines - linesCount;
 
-                        let text = lastLines.join("\n");
-                        consoleText = (text.concat("\n")).concat(consoleText);
+                        for (let j = 0; j < linesToShow; j++) {
+                            consoleText = ("\n").concat(consoleText);
+                        }
 
                         linesCount += linesToShow;
                     }
                 }
-            } else {
-                if (linesCount + messageLines <= this._myMaxLines) {
-                    for (let j = 0; j < messageLines; j++) {
-                        consoleText = ("\n").concat(consoleText);
-                    }
-                    linesCount += messageLines;
-                } else {
-                    let linesToShow = this._myMaxLines - linesCount;
 
-                    for (let j = 0; j < linesToShow; j++) {
-                        consoleText = ("\n").concat(consoleText);
-                    }
-
-                    linesCount += linesToShow;
-                }
+                i -= 1;
             }
-
-
-            i -= 1;
         }
 
         consoleText = (".\n").concat(consoleText);
@@ -173,10 +184,8 @@ PP.ConsoleVR = class ConsoleVR {
 PP.ConsoleVR.MessageType = {
     LOG: 0,
     ERROR: 1,
-    /*
-    WARNING: 2,
+    WARN: 2,
     INFO: 3
-    */
 };
 
 PP.ConsoleVR.Message = class Message {

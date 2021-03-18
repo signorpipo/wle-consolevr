@@ -1,6 +1,8 @@
 WL.registerComponent('console-vr', {
     _myLog: { type: WL.Type.Object, default: null },
     _myError: { type: WL.Type.Object, default: null },
+    _myWarn: { type: WL.Type.Object, default: null },
+    _myInfo: { type: WL.Type.Object, default: null }
 }, {
     init: function () {
         this._myImpl = new PP.ConsoleVR(this);
