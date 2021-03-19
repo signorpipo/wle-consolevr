@@ -14,17 +14,31 @@ PP.ConsoleVR = class ConsoleVR {
 
         this.myIsActive = true;
 
-        this._myMaxCharactersPerLine = 110;
-        this._myMaxLines = 23;
-        this._myMaxMessages = 100;
-        this._myMaxMessagesDeletePad = 20; // to prevent deleting at every message, delay the delete after the limit is exceed by this value
-
         this._myOldConsole = [];
 
         this._myTypeFilters = [];
         for (let key in PP.ConsoleVR.MessageType) {
             this._myTypeFilters[PP.ConsoleVR.MessageType[key]] = false;
         }
+
+        this._myOnClickAlreadyTriggeredThisFrame = false; //fix an issue in cursor-target that calls onclick twice
+
+        //Constants
+        this._myMessageTypeColors = [];
+        this._myMessageTypeColors[PP.ConsoleVR.MessageType.LOG] = [1, 1, 1, 1];
+        this._myMessageTypeColors[PP.ConsoleVR.MessageType.ERROR] = [1, 0, 0, 1];
+        this._myMessageTypeColors[PP.ConsoleVR.MessageType.WARN] = [1, 1, 0, 1];
+        this._myMessageTypeColors[PP.ConsoleVR.MessageType.INFO] = [0, 0, 1, 1];
+
+        this._myMaxCharactersPerLine = 110;
+        this._myMaxLines = 23;
+        this._myMaxMessages = 100;
+        this._myMaxMessagesDeletePad = 20; // to prevent deleting at every message, delay the delete after the limit is exceed by this value
+
+        this._myButtonNormalColor = [46 / 255, 46 / 255, 46 / 255, 1];
+        this._myButtonHoverColor = [150 / 255, 150 / 255, 150 / 255, 1];
+
+        this._myFilterButtonDisabledTextColor = [100 / 255, 100 / 255, 100 / 255, 1];
     }
 
     start() {
@@ -47,16 +61,19 @@ PP.ConsoleVR = class ConsoleVR {
         this._myTextComponents[PP.ConsoleVR.MessageType.INFO] = this._myConsoleVRComponent._myInfo.getComponent("text");
 
         this._myTextComponents[PP.ConsoleVR.MessageType.LOG].material = this._myTextComponents[PP.ConsoleVR.MessageType.LOG].material.clone();
-        this._myTextComponents[PP.ConsoleVR.MessageType.LOG].material.color = [1, 1, 1, 1];
+        this._myTextComponents[PP.ConsoleVR.MessageType.LOG].material.color = this._myMessageTypeColors[PP.ConsoleVR.MessageType.LOG];
         this._myTextComponents[PP.ConsoleVR.MessageType.ERROR].material = this._myTextComponents[PP.ConsoleVR.MessageType.ERROR].material.clone();
-        this._myTextComponents[PP.ConsoleVR.MessageType.ERROR].material.color = [1, 0, 0, 1];
+        this._myTextComponents[PP.ConsoleVR.MessageType.ERROR].material.color = this._myMessageTypeColors[PP.ConsoleVR.MessageType.ERROR];
         this._myTextComponents[PP.ConsoleVR.MessageType.WARN].material = this._myTextComponents[PP.ConsoleVR.MessageType.WARN].material.clone();
-        this._myTextComponents[PP.ConsoleVR.MessageType.WARN].material.color = [1, 1, 0, 1];
+        this._myTextComponents[PP.ConsoleVR.MessageType.WARN].material.color = this._myMessageTypeColors[PP.ConsoleVR.MessageType.WARN];
         this._myTextComponents[PP.ConsoleVR.MessageType.INFO].material = this._myTextComponents[PP.ConsoleVR.MessageType.INFO].material.clone();
-        this._myTextComponents[PP.ConsoleVR.MessageType.INFO].material.color = [0, 0, 1, 1];
+        this._myTextComponents[PP.ConsoleVR.MessageType.INFO].material.color = this._myMessageTypeColors[PP.ConsoleVR.MessageType.INFO];
+
+        this._initializeButtons();
     }
 
     update(dt) {
+        this._myOnClickAlreadyTriggeredThisFrame = false;
     }
 
     _updateText(messageType) {
@@ -130,11 +147,7 @@ PP.ConsoleVR = class ConsoleVR {
             this._myMessages = this._myMessages.slice(this._myMessages.length - this._myMaxMessages);
         }
 
-        if (this.myIsActive) {
-            for (let key in PP.ConsoleVR.MessageType) {
-                this._updateText(PP.ConsoleVR.MessageType[key]);
-            }
-        }
+        this._updateAllTexts();
 
         this._myOldConsole[messageType].apply(console, args);
     }
@@ -178,6 +191,116 @@ PP.ConsoleVR = class ConsoleVR {
         } else {
             this._myMessages.push(message);
         }
+    }
+
+    _updateAllTexts() {
+        if (this.myIsActive) {
+            for (let key in PP.ConsoleVR.MessageType) {
+                this._updateText(PP.ConsoleVR.MessageType[key]);
+            }
+        }
+    }
+
+    _initializeButtons() {
+        this._myFilterTextMaterials = [];
+
+        {
+            let tempMaterial = this._myConsoleVRComponent._myFilterLogButton.children[0].getComponent("mesh").material.clone();
+            this._myConsoleVRComponent._myFilterLogButton.children[0].getComponent("mesh").material = tempMaterial;
+            this._myFilterTextMaterials[PP.ConsoleVR.MessageType.LOG] = this._myConsoleVRComponent._myFilterLogButton.children[1].getComponent("text").material.clone();
+            this._myConsoleVRComponent._myFilterLogButton.children[1].getComponent("text").material = this._myFilterTextMaterials[PP.ConsoleVR.MessageType.LOG];
+
+            let cursorTarget = this._myConsoleVRComponent._myFilterLogButton.getComponent("cursor-target");
+            cursorTarget.addClickFunction(this._toggleFilter.bind(this, PP.ConsoleVR.MessageType.LOG));
+            cursorTarget.addHoverFunction(this._genericHover.bind(this, tempMaterial));
+            cursorTarget.addUnHoverFunction(this._genericUnHover.bind(this, tempMaterial));
+        }
+
+        {
+            let tempMaterial = this._myConsoleVRComponent._myFilterErrorButton.children[0].getComponent("mesh").material.clone();
+            this._myConsoleVRComponent._myFilterErrorButton.children[0].getComponent("mesh").material = tempMaterial;
+            this._myFilterTextMaterials[PP.ConsoleVR.MessageType.ERROR] = this._myConsoleVRComponent._myFilterErrorButton.children[1].getComponent("text").material.clone();
+            this._myConsoleVRComponent._myFilterErrorButton.children[1].getComponent("text").material = this._myFilterTextMaterials[PP.ConsoleVR.MessageType.ERROR];
+
+            let cursorTarget = this._myConsoleVRComponent._myFilterErrorButton.getComponent("cursor-target");
+            cursorTarget.addClickFunction(this._toggleFilter.bind(this, PP.ConsoleVR.MessageType.ERROR));
+            cursorTarget.addHoverFunction(this._genericHover.bind(this, tempMaterial));
+            cursorTarget.addUnHoverFunction(this._genericUnHover.bind(this, tempMaterial));
+        }
+
+        {
+            let tempMaterial = this._myConsoleVRComponent._myFilterWarnButton.children[0].getComponent("mesh").material.clone();
+            this._myConsoleVRComponent._myFilterWarnButton.children[0].getComponent("mesh").material = tempMaterial;
+            this._myFilterTextMaterials[PP.ConsoleVR.MessageType.WARN] = this._myConsoleVRComponent._myFilterWarnButton.children[1].getComponent("text").material.clone();
+            this._myConsoleVRComponent._myFilterWarnButton.children[1].getComponent("text").material = this._myFilterTextMaterials[PP.ConsoleVR.MessageType.WARN];
+
+            let cursorTarget = this._myConsoleVRComponent._myFilterWarnButton.getComponent("cursor-target");
+            cursorTarget.addClickFunction(this._toggleFilter.bind(this, PP.ConsoleVR.MessageType.WARN));
+            cursorTarget.addHoverFunction(this._genericHover.bind(this, tempMaterial));
+            cursorTarget.addUnHoverFunction(this._genericUnHover.bind(this, tempMaterial));
+        }
+
+        {
+            let tempMaterial = this._myConsoleVRComponent._myFilterInfoButton.children[0].getComponent("mesh").material.clone();
+            this._myConsoleVRComponent._myFilterInfoButton.children[0].getComponent("mesh").material = tempMaterial;
+            this._myFilterTextMaterials[PP.ConsoleVR.MessageType.INFO] = this._myConsoleVRComponent._myFilterInfoButton.children[1].getComponent("text").material.clone();
+            this._myConsoleVRComponent._myFilterInfoButton.children[1].getComponent("text").material = this._myFilterTextMaterials[PP.ConsoleVR.MessageType.INFO];
+
+            let cursorTarget = this._myConsoleVRComponent._myFilterInfoButton.getComponent("cursor-target");
+            cursorTarget.addClickFunction(this._toggleFilter.bind(this, PP.ConsoleVR.MessageType.INFO));
+            cursorTarget.addHoverFunction(this._genericHover.bind(this, tempMaterial));
+            cursorTarget.addUnHoverFunction(this._genericUnHover.bind(this, tempMaterial));
+        }
+
+
+        {
+            let tempMaterial = this._myConsoleVRComponent._myClearButton.children[0].getComponent("mesh").material.clone();
+            this._myConsoleVRComponent._myClearButton.children[0].getComponent("mesh").material = tempMaterial;
+
+            let cursorTarget = this._myConsoleVRComponent._myClearButton.getComponent("cursor-target");
+            cursorTarget.addClickFunction(this._clearConsole.bind(this));
+            cursorTarget.addHoverFunction(this._genericHover.bind(this, tempMaterial));
+            cursorTarget.addUnHoverFunction(this._genericUnHover.bind(this, tempMaterial));
+        }
+
+    }
+
+    _toggleFilter(messageType) {
+        if (this._myOnClickAlreadyTriggeredThisFrame) {
+            return;
+        }
+
+        this._myTypeFilters[messageType] = !this._myTypeFilters[messageType];
+        if (this._myTypeFilters[messageType]) {
+            this._myFilterTextMaterials[messageType].color = this._myFilterButtonDisabledTextColor;
+        } else {
+            this._myFilterTextMaterials[messageType].color = this._myMessageTypeColors[messageType];
+        }
+
+        this._updateAllTexts();
+
+        this._myOnClickAlreadyTriggeredThisFrame = true;
+    }
+
+    _clearConsole() {
+        if (this._myOnClickAlreadyTriggeredThisFrame) {
+            return;
+        }
+
+        this._myMessages = [];
+        this._updateAllTexts();
+
+        console.clear();
+
+        this._myOnClickAlreadyTriggeredThisFrame = true;
+    }
+
+    _genericHover(material) {
+        material.color = this._myButtonHoverColor;
+    }
+
+    _genericUnHover(material) {
+        material.color = this._myButtonNormalColor;
     }
 };
 
