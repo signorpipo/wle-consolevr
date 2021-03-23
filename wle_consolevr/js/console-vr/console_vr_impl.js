@@ -7,6 +7,7 @@ PP.ConsoleVR = class ConsoleVR {
 
     constructor(consoleVRComponent) {
         this._myConsoleVRComponent = consoleVRComponent;
+        this._myConsoleVRSetup = new PP.ConsoleVRSetup();
 
         this._myTextComponents = [];
 
@@ -35,10 +36,15 @@ PP.ConsoleVR = class ConsoleVR {
         this._myMessageTypeColors[PP.ConsoleVR.MessageType.WARN] = [1, 1, 0, 1];
         this._myMessageTypeColors[PP.ConsoleVR.MessageType.INFO] = [0, 0, 1, 1];
 
-        this._myMaxCharactersPerLine = 110;
+        this._myTabString = "    ";
+
+        this._myMaxCharactersPerLine = 100;
+        this._myMaxLineSplits = 10; //prevent infinite splitting
         this._myMaxLines = 23;
         this._myMaxMessages = 100;
         this._myMaxMessagesDeletePad = 20; // to prevent deleting at every message, delay the delete after the limit is exceed by this value
+
+        this._myLinesBetweenMessages = 1;
 
         this._myButtonNormalColor = [46 / 255, 46 / 255, 46 / 255, 1];
         this._myButtonHoverColor = [150 / 255, 150 / 255, 150 / 255, 1];
@@ -46,8 +52,6 @@ PP.ConsoleVR = class ConsoleVR {
         this._myFilterButtonDisabledTextColor = [100 / 255, 100 / 255, 100 / 255, 1];
 
         this._myScrollDelay = 0.1;
-
-        this._myLinesBetweenMessages = 3;
     }
 
     start() {
@@ -78,6 +82,9 @@ PP.ConsoleVR = class ConsoleVR {
         this._myTextComponents[PP.ConsoleVR.MessageType.INFO].material.color = this._myMessageTypeColors[PP.ConsoleVR.MessageType.INFO];
 
         this._initializeButtons();
+
+        this.builder = new PP.ConsoleVRBuilder(this);
+        this.builder.build();
     }
 
     update(dt) {
@@ -164,9 +171,10 @@ PP.ConsoleVR = class ConsoleVR {
             }
         }
 
-        consoleText = (".\n").concat(consoleText);
+        consoleText = this._myConsoleVRSetup.myMessagesTextStartString.concat(consoleText);
 
         this._myTextComponents[messageType].text = consoleText;
+        this._myMessagesTextComponents[messageType].text = consoleText;
     }
 
     _consolePrint(messageType, ...args) {
@@ -183,24 +191,55 @@ PP.ConsoleVR = class ConsoleVR {
     }
 
     _argsToMessage(messageType, ...args) {
-        let formattedString = this._formatArgs(...args);
+        let formattedText = this._formatArgs(...args);
 
-        let lines = formattedString.split("\n");
-        for (let i = 0; i < lines.length; i++) {
-            let line = lines[i];
-            if (line.length > this._myMaxCharactersPerLine) {
-                let firstSub = line.substr(0, this._myMaxCharactersPerLine - 1);
-                let secondSub = line.substr(this._myMaxCharactersPerLine - 1);
-                secondSub = "\t".concat(secondSub);
-
-                lines[i] = firstSub;
-                lines.splice(i + 1, 0, secondSub);
-            }
-        }
+        let lines = this._splitLongLines(formattedText);
 
         let message = new PP.ConsoleVR.Message(messageType, lines);
 
         return message;
+    }
+
+    _splitLongLines(messageText) {
+        let linesToSplit = messageText.split("\n");
+        let lines = [];
+        for (let i = 0; i < linesToSplit.length; i++) {
+            let lineToSplit = linesToSplit[i];
+
+            if (lineToSplit.length > this._myMaxCharactersPerLine) {
+                let spacesAtStart = this._getSpacesAtStart(lineToSplit);
+                let spaceToAdd = this._myTabString.concat(spacesAtStart);
+                let lineSplits = 0;
+
+                while (lineToSplit.length > this._myMaxCharactersPerLine && lineSplits < this._myMaxLineSplits) {
+                    let firstSub = lineToSplit.substr(0, this._myMaxCharactersPerLine - 1);
+                    let secondSub = lineToSplit.substr(this._myMaxCharactersPerLine - 1);
+                    secondSub = spaceToAdd.concat(secondSub);
+
+                    lines.push(firstSub);
+
+                    lineToSplit = secondSub;
+                    lineSplits++;
+                }
+                lines.push(lineToSplit);
+            } else {
+                lines.push(lineToSplit);
+            }
+        }
+
+        return lines;
+    }
+
+    _getSpacesAtStart(text) {
+        let spaces = "";
+        let i = 0;
+
+        while (i < text.length && text[i] == ' ') {
+            spaces = spaces.concat(" ");
+            i++;
+        }
+
+        return spaces;
     }
 
     //Here the formatting using placeholder like %d could be implemented in the future
@@ -438,22 +477,20 @@ PP.ConsoleVR = class ConsoleVR {
 };
 
 PP.ConsoleVR.MessageType = {
-    LOG: 0,
-    ERROR: 1,
-    WARN: 2,
-    INFO: 3
+    INFO: 0,
+    WARN: 1,
+    ERROR: 2,
+    LOG: 3
 };
 
 PP.ConsoleVR.Message = class Message {
     constructor(messageType, messageLines) {
         this.myType = messageType;
+        this.myLines = messageLines;
 
         this._myOriginalText = messageLines.join("\n");
-        this._myOriginalLines = messageLines;
-        this._myMessagesCount = 1;
 
-        this.myText = this._myOriginalText.slice(0);
-        this.myLines = this._myOriginalLines.slice(0);
+        this._myMessagesCount = 1;
     }
 
     hasSameInfo(message) {
@@ -465,8 +502,8 @@ PP.ConsoleVR.Message = class Message {
 
         let countString = (("(x").concat(this._myMessagesCount)).concat(") ");
 
-        this.myText = this._myOriginalText.slice(0);
-        this.myText = countString.concat(this.myText);
-        this.myLines = this.myText.split("\n");
+        let text = this._myOriginalText.slice(0);
+        text = countString.concat(text);
+        this.myLines = text.split("\n");
     }
 };

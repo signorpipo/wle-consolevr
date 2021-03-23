@@ -27,7 +27,7 @@ WL.registerComponent('test-console', {
 
 
         if (PP.RightGamepad.getButtonInfo(PP.ButtonType.BOTTOM_BUTTON).myIsPressed) {
-            console.warn("Watermelon warn");
+            console.warn("Watermelon warn Watermelon warn Watermelon warn Watermelon warn Watermelon warn Watermelon warn Watermelon warn\n       Watermelon warn Watermelon warn Watermelon warn Watermelon warn Watermelon warn Watermelon warn Watermelon warnWatermelon warn Watermelon warn Watermelon warn Watermelon warn Watermelon warn Watermelon warn Watermelon warn");
         }
         if (PP.RightGamepad.getButtonInfo(PP.ButtonType.TOP_BUTTON).myIsPressed) {
             console.warn("Archery warn\nasdasdasd\nsdsdsd");
@@ -35,7 +35,7 @@ WL.registerComponent('test-console', {
 
 
         if (PP.LeftGamepad.getButtonInfo(PP.ButtonType.BOTTOM_BUTTON).myIsPressed) {
-            console.info("Watermelon info");
+            console.info("Watermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon info");
         }
         if (PP.LeftGamepad.getButtonInfo(PP.ButtonType.TOP_BUTTON).myIsPressed) {
             console.info("Archery info\nasdasdasd\nsdsdsd");
