@@ -10,8 +10,8 @@ WL.registerComponent('console-vr', {
     _myClearButton: { type: WL.Type.Object, default: null },
     _myUpButton: { type: WL.Type.Object, default: null },
     _myDownButton: { type: WL.Type.Object, default: null },
-    _myBackgroundPlaneMesh: { type: WL.Type.Mesh, default: null },
-    _myBackgroundPlaneMaterial: { type: WL.Type.Material, default: null },
+    _myPlaneMesh: { type: WL.Type.Mesh, default: null },
+    _myPlaneMaterial: { type: WL.Type.Material, default: null },
     _myTextMaterial: { type: WL.Type.Material, default: null }
 }, {
     init: function () {
