@@ -8,6 +8,7 @@ PP.ConsoleVR = class ConsoleVR {
     constructor(consoleVRComponent) {
         this._myConsoleVRComponent = consoleVRComponent;
         this._myConsoleVRSetup = new PP.ConsoleVRSetup();
+        this._myConsoleVR_UI = new PP.ConsoleVR_UI();
 
         this._myTextComponents = [];
 
@@ -55,17 +56,9 @@ PP.ConsoleVR = class ConsoleVR {
     }
 
     start() {
-        this._myOldConsole[PP.ConsoleVR.MessageType.ERROR] = console.error;
-        console.error = this._consolePrint.bind(this, PP.ConsoleVR.MessageType.ERROR);
+        this._myConsoleVR_UI.build(this._myConsoleVRComponent, this._myConsoleVRSetup);
 
-        this._myOldConsole[PP.ConsoleVR.MessageType.LOG] = console.log;
-        console.log = this._consolePrint.bind(this, PP.ConsoleVR.MessageType.LOG);
-
-        this._myOldConsole[PP.ConsoleVR.MessageType.WARN] = console.warn;
-        console.warn = this._consolePrint.bind(this, PP.ConsoleVR.MessageType.WARN);
-
-        this._myOldConsole[PP.ConsoleVR.MessageType.INFO] = console.info;
-        console.info = this._consolePrint.bind(this, PP.ConsoleVR.MessageType.INFO);
+        this._shimConsoleFunctions();
 
         this._myTextComponents[PP.ConsoleVR.MessageType.LOG] = this._myConsoleVRComponent._myLog.getComponent("text");
         this._myTextComponents[PP.ConsoleVR.MessageType.ERROR] = this._myConsoleVRComponent._myError.getComponent("text");
@@ -82,9 +75,22 @@ PP.ConsoleVR = class ConsoleVR {
         this._myTextComponents[PP.ConsoleVR.MessageType.INFO].material.color = this._myMessageTypeColors[PP.ConsoleVR.MessageType.INFO];
 
         this._initializeButtons();
+    }
 
-        this.builder = new PP.ConsoleVRBuilder(this);
-        this.builder.build();
+    //This must be done only when all the setup is complete, to avoid issues with other part of the code calling the console and then triggering the console vr while not ready yet
+    _shimConsoleFunctions() {
+        this._myOldConsole[PP.ConsoleVR.MessageType.ERROR] = console.error;
+        console.error = this._consolePrint.bind(this, PP.ConsoleVR.MessageType.ERROR);
+
+        this._myOldConsole[PP.ConsoleVR.MessageType.LOG] = console.log;
+        console.log = this._consolePrint.bind(this, PP.ConsoleVR.MessageType.LOG);
+
+        this._myOldConsole[PP.ConsoleVR.MessageType.WARN] = console.warn;
+        console.warn = this._consolePrint.bind(this, PP.ConsoleVR.MessageType.WARN);
+
+        this._myOldConsole[PP.ConsoleVR.MessageType.INFO] = console.info;
+        console.info = this._consolePrint.bind(this, PP.ConsoleVR.MessageType.INFO);
+
     }
 
     update(dt) {
@@ -173,8 +179,7 @@ PP.ConsoleVR = class ConsoleVR {
 
         consoleText = this._myConsoleVRSetup.myMessagesTextStartString.concat(consoleText);
 
-        this._myTextComponents[messageType].text = consoleText;
-        this._myMessagesTextComponents[messageType].text = consoleText;
+        this._myConsoleVR_UI._myMessagesTextComponents[messageType].text = consoleText;
     }
 
     _consolePrint(messageType, ...args) {
