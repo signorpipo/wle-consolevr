@@ -2,6 +2,7 @@ PP.ConsoleVRSetup = class ConsoleVRSetup {
 
     constructor() {
         this._initializeBuildSetup();
+        this._initializeRuntimeSetup();
     }
 
     _initializeBuildSetup() {
@@ -132,5 +133,30 @@ PP.ConsoleVRSetup = class ConsoleVRSetup {
         this.myPointerCursorTargetPosition = [0, 0, 0];
         this.myPointerCursorTargetPosition[1] = (this.myMessagesPanelPosition[1] + this.myMessagesBackgroundScale[1]) - this.myPointerCollisionExtents[1];
         this.myPointerCursorTargetPosition[2] = this.myButtonsPanelPosition[2] + this.myButtonTextPosition[2] - 0.0001; // a little behind the button target to avoid hiding it
+    }
+
+    _initializeRuntimeSetup() {
+        this.myMessageTypeColors = [];
+        this.myMessageTypeColors[PP.ConsoleVR.MessageType.LOG] = [1, 1, 1, 1];
+        this.myMessageTypeColors[PP.ConsoleVR.MessageType.ERROR] = [1, 0, 0, 1];
+        this.myMessageTypeColors[PP.ConsoleVR.MessageType.WARN] = [1, 1, 0, 1];
+        this.myMessageTypeColors[PP.ConsoleVR.MessageType.INFO] = [0, 0, 1, 1];
+
+        this.myTabString = "    ";
+
+        this.myMaxCharactersPerLine = 100;
+        this.myMaxLineSplits = 10; //prevent infinite splitting
+        this.myMaxLines = 23;
+        this.myMaxMessages = 100;
+        this.myMaxMessagesDeletePad = 20; // to prevent deleting at every message, delay the delete after the limit is exceed by this value
+
+        this.myLinesBetweenMessages = 1;
+
+        this.myButtonHoverColor = [150 / 255, 150 / 255, 150 / 255, 1];
+
+        this.myFilterButtonDisabledTextColor = this.myBackgroundColor;
+        this.myFilterButtonDisabledBackgroundColor = [110 / 255, 110 / 255, 110 / 255, 1];
+
+        this.myScrollDelay = 0.1;
     }
 };
