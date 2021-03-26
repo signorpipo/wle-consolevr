@@ -164,7 +164,7 @@ PP.ConsoleVRSetup = class ConsoleVRSetup {
         this.myScrollAmount = 1;
         this.myScrollThumbstickDelay = 0.1;
         this.myScrollThumbstickMinThreshold = 0.2;
-        this.myScrollThumbstickAmount = 2;
+        this.myScrollThumbstickAmount = 3;
 
         this.myPulseDelay = 5;
         this.myPulseWhenVisible = true;
@@ -175,7 +175,7 @@ PP.ConsoleVRSetup = class ConsoleVRSetup {
 
 PP.ConsoleVRCursorSetup = class ConsoleVRCursorSetup {
     constructor() {
-        this.myCursorPosition = [0.01, 0.024, 0.05];
+        this.myCursorPosition = [0.01, -0.024, -0.05];
         this.myCursorRotation = [-0.382, 0, 0, 0.924];
         this.myCursorRotation = glMatrix.quat.normalize(this.myCursorRotation, this.myCursorRotation);
         this.myCursorMeshScale = [0.0025, 0.0025, 0.0025];
