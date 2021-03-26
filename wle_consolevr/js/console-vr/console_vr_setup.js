@@ -136,6 +136,8 @@ PP.ConsoleVRSetup = class ConsoleVRSetup {
     }
 
     _initializeRuntimeSetup() {
+        this.myStartVisible = true;
+
         this.myMessageTypeColors = [];
         this.myMessageTypeColors[PP.ConsoleVR.MessageType.LOG] = [1, 1, 1, 1];
         this.myMessageTypeColors[PP.ConsoleVR.MessageType.ERROR] = [1, 0, 0, 1];
@@ -158,5 +160,10 @@ PP.ConsoleVRSetup = class ConsoleVRSetup {
         this.myFilterButtonDisabledBackgroundColor = [110 / 255, 110 / 255, 110 / 255, 1];
 
         this.myScrollDelay = 0.1;
+
+        this.myPulseDelay = 5;
+        this.myPulseWhenVisible = true;
+        this.myPulseIntensity = 0.35;
+        this.myPulseDuration = 0.1;
     }
 };

@@ -11,7 +11,7 @@ PP.ConsoleVR = class ConsoleVR {
 
         this._myMessages = [];
 
-        this._myIsActive = true;
+        this._myIsVisible = true;
 
         this._myOldConsole = [];
 
@@ -26,6 +26,8 @@ PP.ConsoleVR = class ConsoleVR {
         this._myScrollDown = false;
         this._myScrollOffset = 0;
         this._myScrollTimer = 0;
+
+        this._myPulseTimer = 0;
     }
 
     start(consoleVRComponent) {
@@ -33,6 +35,10 @@ PP.ConsoleVR = class ConsoleVR {
         this._addButtonsListeners();
 
         this._setupGamepadsExtraActions();
+
+        if (!this._myConsoleVRSetup.myStartVisible) {
+            this._toggleConsoleVisibility();
+        }
 
         this._shimConsoleFunctions();
     }
@@ -54,7 +60,7 @@ PP.ConsoleVR = class ConsoleVR {
     }
 
     update(dt) {
-        if (this._myIsActive) {
+        if (this._myIsVisible) {
             this._myOnClickAlreadyTriggeredThisFrame = false;
             this._updateScroll(dt);
         }
@@ -251,7 +257,7 @@ PP.ConsoleVR = class ConsoleVR {
     }
 
     _updateAllTexts() {
-        if (this._myIsActive) {
+        if (this._myIsVisible) {
             for (let key in PP.ConsoleVR.MessageType) {
                 this._updateText(PP.ConsoleVR.MessageType[key]);
             }
@@ -449,6 +455,8 @@ PP.ConsoleVR = class ConsoleVR {
                 (rightThumbstickJustPressed && this._myLeftGamepad.getButtonInfo(PP.ButtonType.THUMBSTICK).myIsPressed)) {
                 this._toggleConsoleVisibility();
             }
+
+            this._myPulseTimer = Math.max(this._myPulseTimer - dt, 0);
         }
     }
 
@@ -457,19 +465,23 @@ PP.ConsoleVR = class ConsoleVR {
     }
 
     _pulseGamepad() {
-
+        if (this._myPulseTimer == 0 && (!this._myIsVisible || this._myConsoleVRSetup.myPulseWhenVisible)) {
+            this._myLeftGamepad.pulse(this._myConsoleVRSetup.myPulseIntensity, this._myConsoleVRSetup.myPulseDuration);
+            this._myPulseTimer = this._myConsoleVRSetup.myPulseDelay;
+        }
     }
 
     _toggleConsoleVisibility() {
-        if (this._myIsActive) {
+        if (this._myIsVisible) {
             this._myConsoleVR_UI._myConsoleVRMainPanel.scale([0, 0, 0]);
             this._myConsoleVR_UI._myConsoleVRMainPanel.setTranslationWorld([0, -3000, 0]);
 
-            this._myIsActive = false;
+            this._myIsVisible = false;
         } else {
             this._myConsoleVR_UI._myConsoleVRMainPanel.resetTransform();
 
-            this._myIsActive = true;
+            this._myIsVisible = true;
+            this._updateAllTexts();
         }
     }
 };
