@@ -26,15 +26,17 @@ PP.ConsoleVR = class ConsoleVR {
         this._myScrollDown = false;
         this._myScrollOffset = 0;
         this._myScrollTimer = 0;
+        this._myScrollThumbstickTimer = 0;
 
         this._myPulseTimer = 0;
+
+        this._myLeftGamepad = PP.LeftGamepad; //@EDIT get gamepad LEFT here based on how you store it in your game
+        this._myRightGamepad = PP.RightGamepad; //@EDIT get gamepad RIGHT here based on how you store it in your game
     }
 
     start(consoleVRComponent) {
         this._myConsoleVR_UI.build(consoleVRComponent, this._myConsoleVRSetup);
         this._addButtonsListeners();
-
-        this._setupGamepadsExtraActions();
 
         if (!this._myConsoleVRSetup.myStartVisible) {
             this._toggleConsoleVisibility();
@@ -77,7 +79,7 @@ PP.ConsoleVR = class ConsoleVR {
             let linesCount = 0;
             let i = this._myMessages.length - 1;
 
-            let scrollLinesToSkip = this._myScrollOffset;
+            let scrollLinesToSkip = Math.round(this._myScrollOffset);
 
             while (i >= 0 && linesCount < this._myConsoleVRSetup.myMaxLines) {
                 let message = this._myMessages[i];
@@ -269,13 +271,13 @@ PP.ConsoleVR = class ConsoleVR {
             this._myScrollTimer += dt;
             while (this._myScrollTimer > this._myConsoleVRSetup.myScrollDelay) {
                 this._myScrollTimer -= this._myConsoleVRSetup.myScrollDelay;
-                this._myScrollOffset += 1;
+                this._myScrollOffset += this._myConsoleVRSetup.myScrollAmount;
             }
         } else if (this._myScrollDown) {
             this._myScrollTimer += dt;
             while (this._myScrollTimer > this._myConsoleVRSetup.myScrollDelay) {
                 this._myScrollTimer -= this._myConsoleVRSetup.myScrollDelay;
-                this._myScrollOffset -= 1;
+                this._myScrollOffset -= this._myConsoleVRSetup.myScrollAmount;
             }
         }
 
@@ -385,7 +387,7 @@ PP.ConsoleVR = class ConsoleVR {
 
     _setScrollUp(material, value) {
         if (value) {
-            this._myScrollTimer = this._myConsoleVRSetup.myScrollDelay / 2;
+            this._myScrollTimer = 0;
             this._genericHover(material);
         } else {
             this._genericUnHover(material);
@@ -396,7 +398,7 @@ PP.ConsoleVR = class ConsoleVR {
 
     _setScrollDown(material, value) {
         if (value) {
-            this._myScrollTimer = this._myConsoleVRSetup.myScrollDelay / 2;
+            this._myScrollTimer = 0;
             this._genericHover(material);
         } else {
             this._genericUnHover(material);
@@ -437,15 +439,6 @@ PP.ConsoleVR = class ConsoleVR {
 
     //Gamepad section 
 
-    _setupGamepadsExtraActions() {
-        this._myLeftGamepad = PP.LeftGamepad; //@EDIT get gamepad LEFT here based on how you store it in your game
-        this._myRightGamepad = PP.RightGamepad; //@EDIT get gamepad RIGHT here based on how you store it in your game
-
-        if (this._myLeftGamepad && this._myRightGamepad) {
-            this._myLeftGamepad.registerAxesEvent(PP.AxesEvent.AXES_CHANGED, this, this._scrollWithThumbstick.bind(this));
-        }
-    }
-
     _updateGamepadsExtraActions(dt) {
         if (this._myLeftGamepad && this._myRightGamepad) {
             let leftThumbstickJustPressed = this._myLeftGamepad.getButtonInfo(PP.ButtonType.THUMBSTICK).myIsPressed && !this._myLeftGamepad.getButtonInfo(PP.ButtonType.THUMBSTICK).myIsPrevPressed;
@@ -457,11 +450,30 @@ PP.ConsoleVR = class ConsoleVR {
             }
 
             this._myPulseTimer = Math.max(this._myPulseTimer - dt, 0);
+
+            this._updateScrollWithThumbstick(dt);
         }
     }
 
-    _scrollWithThumbstick(axesInfo, gamepad) {
+    _updateScrollWithThumbstick(dt) {
+        if (this._myIsVisible) {
+            let axesInfo = this._myLeftGamepad.getAxesInfo();
+            if (Math.abs(axesInfo.myAxes[1]) > this._myConsoleVRSetup.myScrollThumbstickMinThreshold) {
+                this._myScrollThumbstickTimer += dt;
 
+                while (this._myScrollThumbstickTimer > this._myConsoleVRSetup.myScrollThumbstickDelay) {
+                    this._myScrollThumbstickTimer -= this._myConsoleVRSetup.myScrollThumbstickDelay;
+
+                    let normalizedScrollAmount = (Math.abs(axesInfo.myAxes[1]) - this._myConsoleVRSetup.myScrollThumbstickMinThreshold) / (1 - this._myConsoleVRSetup.myScrollThumbstickMinThreshold);
+                    this._myScrollOffset += Math.sign(axesInfo.myAxes[1]) * normalizedScrollAmount * this._myConsoleVRSetup.myScrollThumbstickAmount;
+                }
+
+                this._clampScrollOffset();
+                this._updateAllTexts();
+            } else {
+                this._myScrollThumbstickTimer = 0;
+            }
+        }
     }
 
     _pulseGamepad() {

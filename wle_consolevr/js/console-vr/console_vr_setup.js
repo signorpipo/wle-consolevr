@@ -160,6 +160,10 @@ PP.ConsoleVRSetup = class ConsoleVRSetup {
         this.myFilterButtonDisabledBackgroundColor = [110 / 255, 110 / 255, 110 / 255, 1];
 
         this.myScrollDelay = 0.1;
+        this.myScrollAmount = 1;
+        this.myScrollThumbstickDelay = 0.1;
+        this.myScrollThumbstickMinThreshold = 0.2;
+        this.myScrollThumbstickAmount = 1;
 
         this.myPulseDelay = 5;
         this.myPulseWhenVisible = true;
