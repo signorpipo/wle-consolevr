@@ -301,7 +301,7 @@
                         "_myBackgroundPlaneMaterial": "20",
                         "_myTextMaterial": "DefaultFontMaterial",
                         "_myPlaneMesh": "7",
-                        "_myPlaneMaterial": "20"
+                        "_myPlaneMaterial": "139"
                     }
                 }
             ]
@@ -328,6 +328,13 @@
                 0.00914657674729824,
                 -0.01878201588988304,
                 1.0
+            ],
+            "components": [
+                {
+                    "mesh": {
+                        "material": "32"
+                    }
+                }
             ]
         },
         "50": {
@@ -424,6 +431,13 @@
                         "_myThumbstick": "62",
                         "_myBottomButton": "58",
                         "_myTopButton": "63"
+                    }
+                },
+                {
+                    "type": "console-vr-cursor",
+                    "console-vr-cursor": {
+                        "_myCursorMesh": "9",
+                        "_myCursorMaterial": "140"
                     }
                 }
             ]
@@ -751,7 +765,7 @@
             ]
         },
         "77": {
-            "name": "Test",
+            "name": "Test Input Creator",
             "components": [
                 {
                     "type": "test-console",
@@ -2198,7 +2212,7 @@
                 0.000002115964889526367,
                 1.0000009536743165,
                 0.0,
-                -8.940696716308597e-8,
+                -8.9406967163086e-8,
                 -0.0010000169277191165,
                 4.4703483581542978e-8,
                 0.9999999403953552
@@ -2412,7 +2426,8 @@
                 0.0,
                 0.0,
                 1.0
-            ]
+            ],
+            "deleted": true
         },
         "136": {
             "name": "Cursor",
@@ -2474,7 +2489,8 @@
                         "collisionGroup": 7
                     }
                 }
-            ]
+            ],
+            "deleted": true
         },
         "137": {
             "name": "Collision",
@@ -2534,6 +2550,114 @@
                 -0.1987254023551941,
                 1.0
             ]
+        },
+        "141": {
+            "name": "Mesh.000",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "7",
+                        "material": "140"
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.2190622240304947,
+                1.0
+            ],
+            "deleted": true
+        },
+        "142": {
+            "name": "Mesh.001",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "9",
+                        "material": "140"
+                    }
+                }
+            ],
+            "deleted": true
+        },
+        "143": {
+            "name": "Empty.000",
+            "parent": "56",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "9",
+                        "material": "22"
+                    }
+                }
+            ],
+            "transformation": [
+                0.009999999776482582,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.009999999776482582,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.009999999776482582,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "deleted": true
+        },
+        "144": {
+            "name": "Empty.001",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "9",
+                        "material": "22"
+                    }
+                }
+            ],
+            "transformation": [
+                0.019999999552965165,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.019999999552965165,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.019999999552965165,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "parent": "56",
+            "deleted": true
         }
     },
     "meshes": {
@@ -2873,6 +2997,30 @@
                     0.0
                 ]
             }
+        },
+        "139": {
+            "name": "PlaneMaterial",
+            "Phong": {
+                "ambientColor": [
+                    0.48235294222831728,
+                    0.1803921610116959,
+                    0.1803921610116959,
+                    1.0
+                ]
+            },
+            "shader": "Flat",
+            "Flat": {
+                "color": [
+                    0.91372549533844,
+                    0.20066127181053165,
+                    0.20066127181053165,
+                    1.0
+                ]
+            }
+        },
+        "140": {
+            "name": "CursorMaterial",
+            "shader": "Flat"
         }
     },
     "shaders": {
@@ -2954,9 +3102,9 @@
             "sourcePaths": [
                 "/js/components/",
                 "js/pp",
-                "js/import",
                 "js/console-vr",
-                "js/misc"
+                "js/misc",
+                "js/gamepad"
             ]
         },
         "editor": {

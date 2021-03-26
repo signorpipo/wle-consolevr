@@ -9,18 +9,17 @@ WL.registerComponent('console-vr-cursor', {
         this._myConsoleVRCursorObject = WL.scene.addObject(this.object);
         this._myConsoleVRCursorObject.setTranslationLocal(this._myConsoleVRCursorSetup.myCursorPosition);
         this._myConsoleVRCursorObject.rotateObject(this._myConsoleVRCursorSetup.myCursorRotation);
-        this._myConsoleVRCursorObject.scale(this._myConsoleVRCursorSetup.myCursorScale);
 
-        this._myCursorMesh = WL.scene.addObject(this._myConsoleVRCursorObject);
+        this._myCursorMeshObject = WL.scene.addObject(this._myConsoleVRCursorObject);
+        this._myCursorMeshObject.scale(this._myConsoleVRCursorSetup.myCursorMeshScale);
 
-        this._myCursorMeshComponent = this._myCursorMesh.addComponent("mesh");
-        this._myCursorMeshComponent.mesh = this._myCursorMeshComponent;
+        this._myCursorMeshComponent = this._myCursorMeshObject.addComponent("mesh");
+        this._myCursorMeshComponent.mesh = this._myCursorMesh;
         this._myCursorMeshComponent.material = this._myCursorMaterial.clone();
         this._myCursorMeshComponent.material.color = this._myConsoleVRCursorSetup.myCursorColor;
 
-        this._myCursorComponent = this._myConsoleVRCursorObject.addComponent("cursor");
-        this._myCursorComponent.cursorObject = this._myCursorMesh;
-        this._myCursorComponent.collisionGroup = this.myCursorTargetCollisionGroup;
+        this._myCursorComponent = this._myConsoleVRCursorObject.addComponent("cursor", { "collisionGroup": this._myConsoleVRCursorSetup.myCursorTargetCollisionGroup });
+        this._myCursorComponent.cursorObject = this._myCursorMeshObject;
         this._myCursorComponent.handedness = 2; //right
         this._myCursorComponent.rayCastMode = 0; //collision
     }

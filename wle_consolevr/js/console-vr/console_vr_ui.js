@@ -192,7 +192,7 @@ PP.ConsoleVR_UI = class ConsoleVR_UI {
 
             let buttonCollisionComp = this._myFilterButtonsCursorTargets[PP.ConsoleVR.MessageType[key]].addComponent('collision');
             buttonCollisionComp.collider = consoleVRSetup.myButtonsCollisionCollider;
-            buttonCollisionComp.group = consoleVRSetup.myButtonsCollisionGroup;
+            buttonCollisionComp.group = 1 << consoleVRSetup.myButtonsCollisionGroup;
             buttonCollisionComp.extents = consoleVRSetup.myButtonsCollisionExtents;
 
             this._myFilterButtonsBackgroundComponents[PP.ConsoleVR.MessageType[key]] = buttonBackgroundMeshComp;
@@ -221,7 +221,7 @@ PP.ConsoleVR_UI = class ConsoleVR_UI {
 
             let buttonCollisionComp = this._myClearButtonCursorTarget.addComponent('collision');
             buttonCollisionComp.collider = consoleVRSetup.myButtonsCollisionCollider;
-            buttonCollisionComp.group = consoleVRSetup.myButtonsCollisionGroup;
+            buttonCollisionComp.group = 1 << consoleVRSetup.myButtonsCollisionGroup;
             buttonCollisionComp.extents = consoleVRSetup.myButtonsCollisionExtents;
 
             this._myClearButtonBackgroundComponent = buttonBackgroundMeshComp;
@@ -251,7 +251,7 @@ PP.ConsoleVR_UI = class ConsoleVR_UI {
 
             let buttonCollisionComp = this._myUpButtonCursorTarget.addComponent('collision');
             buttonCollisionComp.collider = consoleVRSetup.myButtonsCollisionCollider;
-            buttonCollisionComp.group = consoleVRSetup.myButtonsCollisionGroup;
+            buttonCollisionComp.group = 1 << consoleVRSetup.myButtonsCollisionGroup;
             buttonCollisionComp.extents = consoleVRSetup.myButtonsCollisionExtents;
 
             this._myUpButtonBackgroundComponent = buttonBackgroundMeshComp;
@@ -280,7 +280,7 @@ PP.ConsoleVR_UI = class ConsoleVR_UI {
 
             let buttonCollisionComp = this._myDownButtonCursorTarget.addComponent('collision');
             buttonCollisionComp.collider = consoleVRSetup.myButtonsCollisionCollider;
-            buttonCollisionComp.group = consoleVRSetup.myButtonsCollisionGroup;
+            buttonCollisionComp.group = 1 << consoleVRSetup.myButtonsCollisionGroup;
             buttonCollisionComp.extents = consoleVRSetup.myButtonsCollisionExtents;
 
             this._myDownButtonBackgroundComponent = buttonBackgroundMeshComp;
@@ -295,7 +295,7 @@ PP.ConsoleVR_UI = class ConsoleVR_UI {
 
         let collisionComp = this._myPointerCursorTarget.addComponent('collision');
         collisionComp.collider = consoleVRSetup.myPointerCollisionCollider;
-        collisionComp.group = consoleVRSetup.myPointerCollisionGroup;
+        collisionComp.group = 1 << consoleVRSetup.myPointerCollisionGroup;
         collisionComp.extents = consoleVRSetup.myPointerCollisionExtents;
 
         this._myPointerCursorTargetComponent = cursorTargetComp;
