@@ -9,6 +9,7 @@ PP.ConsoleVRSetup = class ConsoleVRSetup {
         //General
         this.myConsoleVRObjectPosition = [-0.145, -0.035, -0.2];
         this.myConsoleVRObjectRotation = [-0.645, 0.425, 0.25, 0.584];
+        this.myConsoleVRObjectRotation = glMatrix.quat.normalize(this.myConsoleVRObjectRotation, this.myConsoleVRObjectRotation);
 
         this.myDefaultTextColor = [1, 1, 1, 1];
 
@@ -21,7 +22,7 @@ PP.ConsoleVRSetup = class ConsoleVRSetup {
         this.myBackgroundColor = [46 / 255, 46 / 255, 46 / 255, 1];
 
         this.myCursorTargetCollisionCollider = 2; // box
-        this.myCursorTargetCollisionGroup = 1 << 7;
+        this.myCursorTargetCollisionGroup = 1 << 7; //keep this in sync with ConsoleVRSetup
         this.myCursorTargetCollisionThickness = 0.001;
 
 
@@ -171,3 +172,16 @@ PP.ConsoleVRSetup = class ConsoleVRSetup {
         this.myPulseDuration = 0.1;
     }
 };
+
+PP.ConsoleVRCursorSetup = class ConsoleVRCursorSetup {
+    constructor() {
+        this.myCursorPosition = [0.01, 0.024, 0.05];
+        this.myCursorRotation = [-0.382, 0, 0, 0.924];
+        this.myCursorRotation = glMatrix.quat.normalize(this.myCursorRotation, this.myCursorRotation);
+        this.myCursorScale = [0.01, 0.01, 0.01];
+
+        this.myCursorColor = [200 / 255, 200 / 255, 200 / 255, 1];
+
+        this.myCursorTargetCollisionGroup = 7; //keep this in sync with ConsoleVRSetup
+    }
+}

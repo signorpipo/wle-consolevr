@@ -147,7 +147,6 @@ PP.ConsoleVR_UI = class ConsoleVR_UI {
         messagesBackgroundMeshComp.mesh = consoleVRComponent._myPlaneMesh;
         messagesBackgroundMeshComp.material = consoleVRComponent._myPlaneMaterial.clone();
         messagesBackgroundMeshComp.material.color = consoleVRSetup.myBackgroundColor;
-        messagesBackgroundMeshComp.active = true;
 
         this._myMessagesTextComponents = [];
         for (let key in PP.ConsoleVR.MessageType) {
@@ -179,7 +178,6 @@ PP.ConsoleVR_UI = class ConsoleVR_UI {
             buttonBackgroundMeshComp.mesh = consoleVRComponent._myPlaneMesh;
             buttonBackgroundMeshComp.material = consoleVRComponent._myPlaneMaterial.clone();
             buttonBackgroundMeshComp.material.color = consoleVRSetup.myBackgroundColor;
-            buttonBackgroundMeshComp.active = true;
 
             let buttonTextComp = this._myFilterButtonsTexts[PP.ConsoleVR.MessageType[key]].addComponent('text');
             buttonTextComp.alignment = consoleVRSetup.myButtonTextAlignment;
@@ -209,7 +207,6 @@ PP.ConsoleVR_UI = class ConsoleVR_UI {
             buttonBackgroundMeshComp.mesh = consoleVRComponent._myPlaneMesh;
             buttonBackgroundMeshComp.material = consoleVRComponent._myPlaneMaterial.clone();
             buttonBackgroundMeshComp.material.color = consoleVRSetup.myBackgroundColor;
-            buttonBackgroundMeshComp.active = true;
 
             let buttonTextComp = this._myClearButtonText.addComponent('text');
             buttonTextComp.alignment = consoleVRSetup.myButtonTextAlignment;
@@ -239,7 +236,6 @@ PP.ConsoleVR_UI = class ConsoleVR_UI {
             buttonBackgroundMeshComp.mesh = consoleVRComponent._myPlaneMesh;
             buttonBackgroundMeshComp.material = consoleVRComponent._myPlaneMaterial.clone();
             buttonBackgroundMeshComp.material.color = consoleVRSetup.myBackgroundColor;
-            buttonBackgroundMeshComp.active = true;
 
             let buttonTextComp = this._myUpButtonText.addComponent('text');
             buttonTextComp.alignment = consoleVRSetup.myButtonTextAlignment;
@@ -270,7 +266,6 @@ PP.ConsoleVR_UI = class ConsoleVR_UI {
             buttonBackgroundMeshComp.mesh = consoleVRComponent._myPlaneMesh;
             buttonBackgroundMeshComp.material = consoleVRComponent._myPlaneMaterial.clone();
             buttonBackgroundMeshComp.material.color = consoleVRSetup.myBackgroundColor;
-            buttonBackgroundMeshComp.active = true;
 
             let buttonTextComp = this._myDownButtonText.addComponent('text');
             buttonTextComp.alignment = consoleVRSetup.myButtonTextAlignment;
