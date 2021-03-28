@@ -2,7 +2,7 @@ PP.ConsoleVR_UI = class ConsoleVR_UI {
 
     build(consoleVRComponent, consoleVRSetup) {
         this._createSkeleton(consoleVRComponent);
-        this._setTransforms(consoleVRSetup);
+        this._setTransforms(consoleVRComponent, consoleVRSetup);
         this._addComponents(consoleVRComponent, consoleVRSetup);
     }
 
@@ -62,16 +62,16 @@ PP.ConsoleVR_UI = class ConsoleVR_UI {
         this._myPointerCursorTarget = WL.scene.addObject(this._myConsoleVRMainPanel);
     }
     //Transforms
-    _setTransforms(consoleVRSetup) {
-        this._myConsoleVRObject.setTranslationLocal(consoleVRSetup.myConsoleVRObjectPosition);
-        this._myConsoleVRObject.rotateObject(consoleVRSetup.myConsoleVRObjectRotation);
+    _setTransforms(consoleVRComponent, consoleVRSetup) {
+        this._myConsoleVRObject.setTranslationLocal(consoleVRSetup.myConsoleVRObjectTransforms[consoleVRComponent._myHandedness].myPosition);
+        this._myConsoleVRObject.rotateObject(consoleVRSetup.myConsoleVRObjectTransforms[consoleVRComponent._myHandedness].myRotation);
 
-        this._setMessagesTransforms(consoleVRSetup);
-        this._setButtonsTransforms(consoleVRSetup);
-        this._setPointerTransform(consoleVRSetup);
+        this._setMessagesTransforms(consoleVRComponent, consoleVRSetup);
+        this._setButtonsTransforms(consoleVRComponent, consoleVRSetup);
+        this._setPointerTransform(consoleVRComponent, consoleVRSetup);
     }
 
-    _setMessagesTransforms(consoleVRSetup) {
+    _setMessagesTransforms(consoleVRComponent, consoleVRSetup) {
         this._myMessagesPanel.setTranslationLocal(consoleVRSetup.myMessagesPanelPosition);
         this._myMessagesBackground.scale(consoleVRSetup.myMessagesBackgroundScale);
 
@@ -79,7 +79,7 @@ PP.ConsoleVR_UI = class ConsoleVR_UI {
         this._myMessagesTextsPanel.scale(consoleVRSetup.myMessagesTextsPanelScale);
     }
 
-    _setButtonsTransforms(consoleVRSetup) {
+    _setButtonsTransforms(consoleVRComponent, consoleVRSetup) {
         this._myButtonsPanel.setTranslationLocal(consoleVRSetup.myButtonsPanelPosition);
 
         //Filter Buttons
@@ -131,7 +131,7 @@ PP.ConsoleVR_UI = class ConsoleVR_UI {
         }
     }
 
-    _setPointerTransform(consoleVRSetup) {
+    _setPointerTransform(consoleVRComponent, consoleVRSetup) {
         this._myPointerCursorTarget.setTranslationLocal(consoleVRSetup.myPointerCursorTargetPosition);
     }
 

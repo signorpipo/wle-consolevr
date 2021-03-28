@@ -1,14 +1,9 @@
-WL.registerComponent('test-console', {
-    _myConsoleVR: { type: WL.Type.Object, default: null },
+WL.registerComponent('test-input-generator', {
 }, {
     init: function () {
     },
     start: function () {
         window.addEventListener('keydown', this.press.bind(this));
-
-        this._myNeedReset = false;
-
-        this._myConsoleVRImpl = this._myConsoleVR.getComponent("console-vr")._myImpl;
     },
     update: function (dt) {
         if (PP.LeftGamepad.getButtonInfo(PP.ButtonType.SELECT).myIsPressed) {
@@ -35,32 +30,10 @@ WL.registerComponent('test-console', {
 
 
         if (PP.LeftGamepad.getButtonInfo(PP.ButtonType.BOTTOM_BUTTON).myIsPressed) {
-            console.info("Watermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon infoWatermelon info");
+            console.info("Watermelon info Watermelon info Watermelon info Watermelon info Watermelon info Watermelon info Watermelon info Watermelon info Watermelon info Watermelon info Watermelon info Watermelon info Watermelon info Watermelon info Watermelon info Watermelon info Watermelon info Watermelon info");
         }
         if (PP.LeftGamepad.getButtonInfo(PP.ButtonType.TOP_BUTTON).myIsPressed) {
             console.info("Archery info\nasdasdasd\nsdsdsd");
-        }
-
-        let axes = PP.RightGamepad.getAxesInfo().myAxes;
-
-        if (this._myNeedReset) {
-            if (glMatrix.vec2.length(axes) < 0.1) {
-                this._myNeedReset = false;
-            }
-        } else {
-            if (axes[0] > 0.8) {
-                this._myConsoleVRImpl._myTypeFilters[PP.ConsoleVR.MessageType.LOG] = !this._myConsoleVRImpl._myTypeFilters[PP.ConsoleVR.MessageType.LOG];
-                this._myNeedReset = true;
-            } else if (axes[0] < -0.8) {
-                this._myConsoleVRImpl._myTypeFilters[PP.ConsoleVR.MessageType.ERROR] = !this._myConsoleVRImpl._myTypeFilters[PP.ConsoleVR.MessageType.ERROR];
-                this._myNeedReset = true;
-            } else if (axes[1] > 0.8) {
-                this._myConsoleVRImpl._myTypeFilters[PP.ConsoleVR.MessageType.WARN] = !this._myConsoleVRImpl._myTypeFilters[PP.ConsoleVR.MessageType.WARN];
-                this._myNeedReset = true;
-            } else if (axes[1] < -0.8) {
-                this._myConsoleVRImpl._myTypeFilters[PP.ConsoleVR.MessageType.INFO] = !this._myConsoleVRImpl._myTypeFilters[PP.ConsoleVR.MessageType.INFO];
-                this._myNeedReset = true;
-            }
         }
     },
     press: function () {

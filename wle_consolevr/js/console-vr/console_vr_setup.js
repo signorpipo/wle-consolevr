@@ -12,9 +12,21 @@ PP.ConsoleVRSetup = class ConsoleVRSetup {
 
     _initializeBuildSetup() {
         //General
-        this.myConsoleVRObjectPosition = [-0.145, -0.035, -0.2];
-        this.myConsoleVRObjectRotation = [-0.645, 0.425, 0.25, 0.584];
-        this.myConsoleVRObjectRotation = glMatrix.quat.normalize(this.myConsoleVRObjectRotation, this.myConsoleVRObjectRotation);
+        this.myConsoleVRObjectTransforms = [];
+        this.myConsoleVRObjectTransforms[PP.ConsoleVR.Handedness.NONE] = {};
+        this.myConsoleVRObjectTransforms[PP.ConsoleVR.Handedness.NONE].myPosition = [0, 0, 0];
+        this.myConsoleVRObjectTransforms[PP.ConsoleVR.Handedness.NONE].myRotation = [0, 0, 0, 1];
+
+        this.myConsoleVRObjectTransforms[PP.ConsoleVR.Handedness.LEFT] = {};
+        this.myConsoleVRObjectTransforms[PP.ConsoleVR.Handedness.LEFT].myPosition = [-0.145, -0.035, -0.2];
+        this.myConsoleVRObjectTransforms[PP.ConsoleVR.Handedness.LEFT].myRotation = [-0.645, 0.425, 0.25, 0.584];
+        this.myConsoleVRObjectRotation = glMatrix.quat.normalize(this.myConsoleVRObjectTransforms[PP.ConsoleVR.Handedness.LEFT].myRotation, this.myConsoleVRObjectTransforms[PP.ConsoleVR.Handedness.LEFT].myRotation);
+
+        this.myConsoleVRObjectTransforms[PP.ConsoleVR.Handedness.RIGHT] = {};
+        this.myConsoleVRObjectTransforms[PP.ConsoleVR.Handedness.RIGHT].myPosition = [0.231, 0.005, -0.061];
+        this.myConsoleVRObjectTransforms[PP.ConsoleVR.Handedness.RIGHT].myRotation = [-0.645, -0.425, -0.25, 0.584];
+        this.myConsoleVRObjectRotation = glMatrix.quat.normalize(this.myConsoleVRObjectTransforms[PP.ConsoleVR.Handedness.RIGHT].myRotation, this.myConsoleVRObjectTransforms[PP.ConsoleVR.Handedness.RIGHT].myRotation);
+
         this.myCursorTargetCollisionCollider = 2; // box
         this.myCursorTargetCollisionGroup = 7; //keep this in sync with ConsoleVRSetup
         this.myCursorTargetCollisionThickness = 0.001;
@@ -138,8 +150,6 @@ PP.ConsoleVRSetup = class ConsoleVRSetup {
     }
 
     _initializeRuntimeSetup() {
-        this.myStartVisible = true;
-
         this.myTabString = "    ";
 
         this.myMaxCharactersPerLine = 100;
@@ -162,7 +172,6 @@ PP.ConsoleVRSetup = class ConsoleVRSetup {
         this.myScrollThumbstickAmount = 3;
 
         this.myPulseDelay = 5;
-        this.myPulseWhenVisible = true;
         this.myPulseIntensity = 0.35;
         this.myPulseDuration = 0.1;
 

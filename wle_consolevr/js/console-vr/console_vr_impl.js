@@ -30,15 +30,21 @@ PP.ConsoleVR = class ConsoleVR {
 
         this._myPulseTimer = 0;
 
+        this._myHandedness = PP.ConsoleVR.Handedness.NONE;
+
         this._myLeftGamepad = PP.LeftGamepad; //@EDIT get gamepad LEFT here based on how you store it in your game
         this._myRightGamepad = PP.RightGamepad; //@EDIT get gamepad RIGHT here based on how you store it in your game
     }
 
     start(consoleVRComponent) {
+        this._myHandedness = consoleVRComponent._myHandedness;
+        this._myPulseOnNewMessage = consoleVRComponent._myPulseOnNewMessage;
+
         this._myConsoleVR_UI.build(consoleVRComponent, this._myConsoleVRSetup);
+
         this._addButtonsListeners();
 
-        if (!this._myConsoleVRSetup.myStartVisible) {
+        if (!consoleVRComponent._mShowOnStart) {
             this._toggleConsoleVisibility();
         }
 
@@ -460,6 +466,10 @@ PP.ConsoleVR = class ConsoleVR {
     _updateScrollWithThumbstick(dt) {
         if (this._myIsVisible) {
             let axesInfo = this._myLeftGamepad.getAxesInfo();
+            if (this._myHandedness == PP.ConsoleVR.Handedness.RIGHT) {
+                axesInfo = this._myRightGamepad.getAxesInfo();
+            }
+
             if (Math.abs(axesInfo.myAxes[1]) > this._myConsoleVRSetup.myScrollThumbstickMinThreshold) {
                 this._myScrollThumbstickTimer += dt;
 
@@ -479,9 +489,16 @@ PP.ConsoleVR = class ConsoleVR {
     }
 
     _pulseGamepad() {
-        if (this._myPulseTimer == 0 && (!this._myIsVisible || this._myConsoleVRSetup.myPulseWhenVisible)) {
-            this._myLeftGamepad.pulse(this._myConsoleVRSetup.myPulseIntensity, this._myConsoleVRSetup.myPulseDuration);
-            this._myPulseTimer = this._myConsoleVRSetup.myPulseDelay;
+        if (this._myLeftGamepad && this._myRightGamepad) {
+            let pulseEnabled = this._myPulseOnNewMessage == PP.ConsoleVR.PulseOnNewMessage.ALWAYS || (!this._myIsVisible && this._myPulseOnNewMessage == PP.ConsoleVR.PulseOnNewMessage.WHEN_HIDDEN);
+            if (pulseEnabled && this._myPulseTimer == 0) {
+                if (this._myHandedness == PP.ConsoleVR.Handedness.RIGHT) {
+                    this._myRightGamepad.pulse(this._myConsoleVRSetup.myPulseIntensity, this._myConsoleVRSetup.myPulseDuration);
+                } else {
+                    this._myLeftGamepad.pulse(this._myConsoleVRSetup.myPulseIntensity, this._myConsoleVRSetup.myPulseDuration);
+                }
+                this._myPulseTimer = this._myConsoleVRSetup.myPulseDelay;
+            }
         }
     }
 
@@ -530,4 +547,16 @@ PP.ConsoleVR.Message = class Message {
         text = countString.concat(text);
         this.myLines = text.split("\n");
     }
+};
+
+PP.ConsoleVR.Handedness = {
+    NONE: 0,
+    LEFT: 1,
+    RIGHT: 2,
+};
+
+PP.ConsoleVR.PulseOnNewMessage = {
+    NONE: 0,
+    ALWAYS: 1,
+    WHEN_HIDDEN: 2,
 };

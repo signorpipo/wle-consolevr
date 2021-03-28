@@ -1,4 +1,5 @@
 WL.registerComponent('console-vr-cursor', {
+    _myHandedness: { type: WL.Type.Enum, values: ['left', 'right'], default: 'left' },
     _myCursorMesh: { type: WL.Type.Mesh, default: null },
     _myCursorMaterial: { type: WL.Type.Material, default: null }
 }, {
@@ -20,7 +21,7 @@ WL.registerComponent('console-vr-cursor', {
 
         this._myCursorComponent = this._myConsoleVRCursorObject.addComponent("cursor", { "collisionGroup": this._myConsoleVRCursorSetup.myCursorTargetCollisionGroup });
         this._myCursorComponent.cursorObject = this._myCursorMeshObject;
-        this._myCursorComponent.handedness = 2; //right
+        this._myCursorComponent.handedness = this._myHandedness + 1;
         this._myCursorComponent.rayCastMode = 0; //collision
     }
 });
