@@ -380,7 +380,9 @@ PP.ConsoleVR = class ConsoleVR {
         this._clampScrollOffset();
         this._updateAllTexts();
 
-        console.clear();
+        if (this._myConsoleVRSetup.myClearOriginalConsoleWhenClearPressed) {
+            console.clear();
+        }
 
         this._myOnClickAlreadyTriggeredThisFrame = true;
     }

@@ -1,8 +1,13 @@
 PP.ConsoleVRSetup = class ConsoleVRSetup {
 
     constructor() {
+        this._initializeCommonSetup();
         this._initializeBuildSetup();
         this._initializeRuntimeSetup();
+    }
+
+    _initializeCommonSetup() {
+        this.myBackgroundColor = [46 / 255, 46 / 255, 46 / 255, 1];
     }
 
     _initializeBuildSetup() {
@@ -10,21 +15,17 @@ PP.ConsoleVRSetup = class ConsoleVRSetup {
         this.myConsoleVRObjectPosition = [-0.145, -0.035, -0.2];
         this.myConsoleVRObjectRotation = [-0.645, 0.425, 0.25, 0.584];
         this.myConsoleVRObjectRotation = glMatrix.quat.normalize(this.myConsoleVRObjectRotation, this.myConsoleVRObjectRotation);
+        this.myCursorTargetCollisionCollider = 2; // box
+        this.myCursorTargetCollisionGroup = 7; //keep this in sync with ConsoleVRSetup
+        this.myCursorTargetCollisionThickness = 0.001;
 
         this.myDefaultTextColor = [255 / 255, 255 / 255, 255 / 255, 1];
 
         this.myMessageTypeColors = [];
         this.myMessageTypeColors[PP.ConsoleVR.MessageType.LOG] = this.myDefaultTextColor;
-        this.myMessageTypeColors[PP.ConsoleVR.MessageType.ERROR] = [1, 0, 0, 1];
-        this.myMessageTypeColors[PP.ConsoleVR.MessageType.WARN] = [1, 1, 0, 1];
-        this.myMessageTypeColors[PP.ConsoleVR.MessageType.INFO] = [0, 0, 1, 1];
-
-        this.myBackgroundColor = [46 / 255, 46 / 255, 46 / 255, 1];
-
-        this.myCursorTargetCollisionCollider = 2; // box
-        this.myCursorTargetCollisionGroup = 7; //keep this in sync with ConsoleVRSetup
-        this.myCursorTargetCollisionThickness = 0.001;
-
+        this.myMessageTypeColors[PP.ConsoleVR.MessageType.ERROR] = [255 / 255, 40 / 255, 40 / 255, 1];
+        this.myMessageTypeColors[PP.ConsoleVR.MessageType.WARN] = [250 / 255, 220 / 255, 40 / 255, 1];
+        this.myMessageTypeColors[PP.ConsoleVR.MessageType.INFO] = [60 / 255, 200 / 255, 255 / 255, 1];
 
         //Messages
         this.myMessagesPanelPosition = [0, 0.075, 0];
@@ -139,12 +140,6 @@ PP.ConsoleVRSetup = class ConsoleVRSetup {
     _initializeRuntimeSetup() {
         this.myStartVisible = true;
 
-        this.myMessageTypeColors = [];
-        this.myMessageTypeColors[PP.ConsoleVR.MessageType.LOG] = [1, 1, 1, 1];
-        this.myMessageTypeColors[PP.ConsoleVR.MessageType.ERROR] = [1, 0, 0, 1];
-        this.myMessageTypeColors[PP.ConsoleVR.MessageType.WARN] = [1, 1, 0, 1];
-        this.myMessageTypeColors[PP.ConsoleVR.MessageType.INFO] = [0, 0, 1, 1];
-
         this.myTabString = "    ";
 
         this.myMaxCharactersPerLine = 100;
@@ -170,6 +165,8 @@ PP.ConsoleVRSetup = class ConsoleVRSetup {
         this.myPulseWhenVisible = true;
         this.myPulseIntensity = 0.35;
         this.myPulseDuration = 0.1;
+
+        this.myClearOriginalConsoleWhenClearPressed = true;
     }
 };
 
