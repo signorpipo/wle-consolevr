@@ -33,8 +33,9 @@ PP.ConsoleVR = class ConsoleVR {
 
         this._myHandedness = PP.ConsoleVR.Handedness.NONE;
 
-        this._myLeftGamepad = PP.LeftGamepad; //@EDIT get gamepad LEFT here based on how you store it in your game
-        this._myRightGamepad = PP.RightGamepad; //@EDIT get gamepad RIGHT here based on how you store it in your game
+        //@EDIT remove this if you don't want to use the gamepad features
+        this._myLeftGamepad = ((typeof PP.LeftGamepad) !== 'undefined') ? PP.LeftGamepad : null; //@EDIT get gamepad LEFT here based on how you store it in your game
+        this._myRightGamepad = ((typeof PP.RightGamepad) !== 'undefined') ? PP.RightGamepad : null; //@EDIT get gamepad RIGHT here based on how you store it in your game
     }
 
     start(consoleVRComponent) {
