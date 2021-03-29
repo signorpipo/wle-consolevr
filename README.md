@@ -10,7 +10,7 @@ Console VR can do so many things! You may want to know some of them:
   - Filter by message type, like log, error, warn, and info
   - Clear the console
   - Scroll up and down
-  - Show and hide the Console VR by pressing L3 + R3
+  - Show and hide the Console VR
   - Get a pulse notification on your gamepad when a new message is received
   - Choose your handedness
   - Be marvelous
@@ -26,11 +26,17 @@ From the `console_vr_setup.js` script you can specify, for example:
   - Scroll speed
   - ...
 
+### Tricks
+  - You can show and hide the Console VR by pressing L3 + R3
+  - The Console VR can be scrolled by using the left thumbstick
+  - If you click (instead of just hovering) on the Up or Down buttons the Console VR will automagically scroll to the top or the bottom
+
+
 ### Weaknesses
 There are sadly some things that the marvelous Console VR can't achieve yet, this includes:
-  - Object will be displayed as \[Object object]
-  - Placeholders like %d and other similar kinds of way to build strings are not supported
-  - Some messages are not intercepted, like the error from glMatrix.mat4.invert(null, null)
+  - Object will be displayed as `\[Object object]`
+  - Placeholders like `%d` and other similar kinds of way to build strings are not supported
+  - Some messages are not intercepted, like the error from `glMatrix.mat4.invert(null, null)`
 
 ## How to import
 TODO
