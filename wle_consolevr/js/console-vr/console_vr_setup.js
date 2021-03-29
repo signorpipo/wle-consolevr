@@ -151,6 +151,7 @@ PP.ConsoleVRSetup = class ConsoleVRSetup {
 
     _initializeRuntimeSetup() {
         this.myTabString = "    ";
+        this.myAssertStartString = "Assertion failed:";
 
         this.myMaxCharactersPerLine = 100;
         this.myMaxLineSplits = 10; //prevent infinite splitting
@@ -172,8 +173,8 @@ PP.ConsoleVRSetup = class ConsoleVRSetup {
         this.myScrollThumbstickAmount = 3;
 
         this.myPulseDelay = 5;
-        this.myPulseIntensity = 0.35;
-        this.myPulseDuration = 0.1;
+        this.myPulseIntensity = 0.3;
+        this.myPulseDuration = 0.085;
 
         this.myClearOriginalConsoleWhenClearPressed = true;
     }

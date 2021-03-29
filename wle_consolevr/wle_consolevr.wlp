@@ -457,7 +457,8 @@
                         "_myPlaneMesh": "7",
                         "_myPlaneMaterial": "139",
                         "_myTextMaterial": "DefaultFontMaterial",
-                        "_mShowOnStart": true
+                        "_mShowOnStart": false,
+                        "_myPulseOnNewMessage": "none"
                     }
                 }
             ]
@@ -2703,7 +2704,8 @@
                         "_mShowOnStart": true,
                         "_myPlaneMesh": "7",
                         "_myPlaneMaterial": "139",
-                        "_myTextMaterial": "DefaultFontMaterial"
+                        "_myTextMaterial": "DefaultFontMaterial",
+                        "_myPulseOnNewMessage": "always"
                     }
                 }
             ]

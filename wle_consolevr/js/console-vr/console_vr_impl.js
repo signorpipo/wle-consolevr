@@ -1,6 +1,7 @@
 /* Doesn't support
     - Placeholder like %d and other similar kind of way to build strings
     - Object to string will result in [Object object]
+    - Some messages are not intercepted, like the error from glMatrix.mat4.invert(null, null)
 */
 
 PP.ConsoleVR = class ConsoleVR {
@@ -53,18 +54,23 @@ PP.ConsoleVR = class ConsoleVR {
 
     //This must be done only when all the setup is complete, to avoid issues with other part of the code calling the console and then triggering the console vr while not ready yet
     _shimConsoleFunctions() {
-        this._myOldConsole[PP.ConsoleVR.MessageType.ERROR] = console.error;
-        console.error = this._consolePrint.bind(this, PP.ConsoleVR.MessageType.ERROR);
+        this._myOldConsole[PP.ConsoleVR.ConsoleType.LOG] = console.log;
+        console.log = this._consolePrint.bind(this, PP.ConsoleVR.ConsoleType.LOG);
 
-        this._myOldConsole[PP.ConsoleVR.MessageType.LOG] = console.log;
-        console.log = this._consolePrint.bind(this, PP.ConsoleVR.MessageType.LOG);
+        this._myOldConsole[PP.ConsoleVR.ConsoleType.ERROR] = console.error;
+        console.error = this._consolePrint.bind(this, PP.ConsoleVR.ConsoleType.ERROR);
 
-        this._myOldConsole[PP.ConsoleVR.MessageType.WARN] = console.warn;
-        console.warn = this._consolePrint.bind(this, PP.ConsoleVR.MessageType.WARN);
+        this._myOldConsole[PP.ConsoleVR.ConsoleType.WARN] = console.warn;
+        console.warn = this._consolePrint.bind(this, PP.ConsoleVR.ConsoleType.WARN);
 
-        this._myOldConsole[PP.ConsoleVR.MessageType.INFO] = console.info;
-        console.info = this._consolePrint.bind(this, PP.ConsoleVR.MessageType.INFO);
+        this._myOldConsole[PP.ConsoleVR.ConsoleType.INFO] = console.info;
+        console.info = this._consolePrint.bind(this, PP.ConsoleVR.ConsoleType.INFO);
 
+        this._myOldConsole[PP.ConsoleVR.ConsoleType.DEBUG] = console.debug;
+        console.debug = this._consolePrint.bind(this, PP.ConsoleVR.ConsoleType.DEBUG);
+
+        this._myOldConsole[PP.ConsoleVR.ConsoleType.ASSERT] = console.assert;
+        console.assert = this._consolePrint.bind(this, PP.ConsoleVR.ConsoleType.ASSERT);
     }
 
     update(dt) {
@@ -166,25 +172,55 @@ PP.ConsoleVR = class ConsoleVR {
         this._myConsoleVR_UI._myMessagesTextComponents[messageType].text = consoleText;
     }
 
-    _consolePrint(messageType, ...args) {
-        let message = this._argsToMessage(messageType, ...args);
-        this._addMessage(message);
+    _consolePrint(consoleType, ...args) {
+        if (consoleType != PP.ConsoleVR.ConsoleType.ASSERT || (args.length > 0 && !args[0])) {
+            let message = this._argsToMessage(consoleType, ...args);
+            this._addMessage(message);
 
-        if (this._myMessages.length >= this._myConsoleVRSetup.myMaxMessages + this._myConsoleVRSetup.myMaxMessagesDeletePad) {
-            this._myMessages = this._myMessages.slice(this._myMessages.length - this._myConsoleVRSetup.myMaxMessages);
+            if (this._myMessages.length >= this._myConsoleVRSetup.myMaxMessages + this._myConsoleVRSetup.myMaxMessagesDeletePad) {
+                this._myMessages = this._myMessages.slice(this._myMessages.length - this._myConsoleVRSetup.myMaxMessages);
+            }
+
+            this._updateAllTexts();
+
+            this._pulseGamepad();
         }
 
-        this._updateAllTexts();
-
-        this._pulseGamepad();
-
-        this._myOldConsole[messageType].apply(console, args);
+        this._myOldConsole[consoleType].apply(console, args);
     }
 
-    _argsToMessage(messageType, ...args) {
+    _consoleTypeToMessageType(consoleType) {
+        let messageType = PP.ConsoleVR.MessageType.LOG;
+
+        if (consoleType < PP.ConsoleVR.ConsoleType.DEBUG) {
+            messageType = consoleType;
+        } else if (consoleType == PP.ConsoleVR.ConsoleType.DEBUG) {
+            messageType = PP.ConsoleVR.MessageType.LOG;
+        } else {
+            messageType = PP.ConsoleVR.MessageType.ERROR;
+        }
+
+        return messageType;
+    }
+
+    _argsToMessage(consoleType, ...args) {
+        if (consoleType == PP.ConsoleVR.ConsoleType.ASSERT) {
+            args = args.slice(1);
+            args.splice(0, 0, this._myConsoleVRSetup.myAssertStartString);
+        }
+
+        let messageType = this._consoleTypeToMessageType(consoleType);
+
         let formattedText = this._formatArgs(...args);
 
         let lines = this._splitLongLines(formattedText);
+
+        if (messageType == PP.ConsoleVR.MessageType.DEBUG) {
+            messageType = PP.ConsoleVR.MessageType.LOG;
+        } else if (messageType == PP.ConsoleVR.MessageType.EXCEPTION || messageType == PP.ConsoleVR.MessageType.ASSERT) {
+            messageType = PP.ConsoleVR.MessageType.ERROR;
+        }
+
 
         let message = new PP.ConsoleVR.Message(messageType, lines);
 
@@ -522,6 +558,16 @@ PP.ConsoleVR.MessageType = {
     WARN: 1,
     ERROR: 2,
     LOG: 3
+};
+
+
+PP.ConsoleVR.ConsoleType = {
+    INFO: 0,
+    WARN: 1,
+    ERROR: 2,
+    LOG: 3,
+    DEBUG: 4,
+    ASSERT: 5
 };
 
 PP.ConsoleVR.Message = class Message {
