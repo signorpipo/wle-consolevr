@@ -502,19 +502,21 @@ PP.ConsoleVR = class ConsoleVR {
 
     _updateScrollWithThumbstick(dt) {
         if (this._myIsVisible) {
-            let axesInfo = this._myLeftGamepad.getAxesInfo();
-            if (this._myHandedness == PP.ConsoleVR.Handedness.RIGHT) {
-                axesInfo = this._myRightGamepad.getAxesInfo();
+            let axes = [0, 0];
+            if (this._myConsoleVRSetup.myScrollThumbstickHandedness == PP.ConsoleVR.Handedness.LEFT) {
+                axes = this._myLeftGamepad.getAxesInfo().myAxes;
+            } else if (this._myConsoleVRSetup.myScrollThumbstickHandedness == PP.ConsoleVR.Handedness.RIGHT) {
+                axes = this._myRightGamepad.getAxesInfo().myAxes;
             }
 
-            if (Math.abs(axesInfo.myAxes[1]) > this._myConsoleVRSetup.myScrollThumbstickMinThreshold) {
+            if (Math.abs(axes[1]) > this._myConsoleVRSetup.myScrollThumbstickMinThreshold) {
                 this._myScrollThumbstickTimer += dt;
 
                 while (this._myScrollThumbstickTimer > this._myConsoleVRSetup.myScrollThumbstickDelay) {
                     this._myScrollThumbstickTimer -= this._myConsoleVRSetup.myScrollThumbstickDelay;
 
-                    let normalizedScrollAmount = (Math.abs(axesInfo.myAxes[1]) - this._myConsoleVRSetup.myScrollThumbstickMinThreshold) / (1 - this._myConsoleVRSetup.myScrollThumbstickMinThreshold);
-                    this._myScrollOffset += Math.sign(axesInfo.myAxes[1]) * normalizedScrollAmount * this._myConsoleVRSetup.myScrollThumbstickAmount;
+                    let normalizedScrollAmount = (Math.abs(axes[1]) - this._myConsoleVRSetup.myScrollThumbstickMinThreshold) / (1 - this._myConsoleVRSetup.myScrollThumbstickMinThreshold);
+                    this._myScrollOffset += Math.sign(axes[1]) * normalizedScrollAmount * this._myConsoleVRSetup.myScrollThumbstickAmount;
                 }
 
                 this._clampScrollOffset();
