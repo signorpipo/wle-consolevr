@@ -1,8 +1,13 @@
+<p align="center">
+<img src="https://github.com/SignorPipo/wle_consolevr/blob/main/extra/showdonttell.gif">
+</p>
 
 ## Description
 Have you ever wondered why you need to remove your headset to read the browser console? Well me too, that's why I've created the marvelous Console VR! 
 
 And, you know, you don't even have to call something special, just spam those `console.logs`, and the Console VR will do the work for you! <3
+
+You can find a live version of the Console VR [here](https://elia-ducceschi.itch.io/console-vr).
 
 ### Features
 Console VR can do so many things! You may want to know some of them:
@@ -61,7 +66,7 @@ To import the marvelous Console VR you have to:
     - `_myCursorMesh`: set this to `PrimitiveSphere`
     - `_myCursorMaterial`: set this to the same Flat material created above
 
-### Extras
+### Extra
   - **Gamepad**
     - If you want the gamepad extra features you will need to import it too
     - Extra features include
