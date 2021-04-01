@@ -168,7 +168,7 @@ PP.ConsoleVRSetup = class ConsoleVRSetup {
 
         this.myScrollDelay = 0.1;
         this.myScrollAmount = 1;
-        this.myScrollThumbstickHandedness = PP.ConsoleVR.Handedness.LEFT;
+        this.myScrollThumbstickHandedness = PP.ConsoleVR.Handedness.RIGHT;
         this.myScrollThumbstickDelay = 0.1;
         this.myScrollThumbstickMinThreshold = 0.2;
         this.myScrollThumbstickAmount = 3;
