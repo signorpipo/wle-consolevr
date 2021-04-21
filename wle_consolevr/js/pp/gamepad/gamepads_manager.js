@@ -17,5 +17,5 @@ WL.registerComponent('gamepads-manager', {
     },
 });
 
-PP.LeftGamepad = new PP.Gamepad(PP.Handedness.LEFT);
-PP.RightGamepad = new PP.Gamepad(PP.Handedness.RIGHT);
+PP.LeftGamepad = new PP.Gamepad(PP.GamepadHandedness.LEFT);
+PP.RightGamepad = new PP.Gamepad(PP.GamepadHandedness.RIGHT);

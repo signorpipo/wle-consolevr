@@ -67,37 +67,37 @@ WL.registerComponent('gamepad-animator', {
         }
 
         //PRESSED
-        this._myGamepad.registerButtonEvent(PP.ButtonType.THUMBSTICK, PP.ButtonEvent.PRESSED_START, this, this._thumbstickPressedStart.bind(this));
-        this._myGamepad.registerButtonEvent(PP.ButtonType.THUMBSTICK, PP.ButtonEvent.PRESSED_END, this, this._thumbstickPressedEnd.bind(this));
+        this._myGamepad.registerButtonEventListener(PP.ButtonType.THUMBSTICK, PP.ButtonEvent.PRESS_START, this, this._thumbstickPressedStart.bind(this));
+        this._myGamepad.registerButtonEventListener(PP.ButtonType.THUMBSTICK, PP.ButtonEvent.PRESS_END, this, this._thumbstickPressedEnd.bind(this));
 
-        this._myGamepad.registerButtonEvent(PP.ButtonType.BOTTOM_BUTTON, PP.ButtonEvent.PRESSED_START, this, this._bottomButtonPressedStart.bind(this));
-        this._myGamepad.registerButtonEvent(PP.ButtonType.BOTTOM_BUTTON, PP.ButtonEvent.PRESSED_END, this, this._bottomButtonPressedEnd.bind(this));
+        this._myGamepad.registerButtonEventListener(PP.ButtonType.BOTTOM_BUTTON, PP.ButtonEvent.PRESS_START, this, this._bottomButtonPressedStart.bind(this));
+        this._myGamepad.registerButtonEventListener(PP.ButtonType.BOTTOM_BUTTON, PP.ButtonEvent.PRESS_END, this, this._bottomButtonPressedEnd.bind(this));
 
-        this._myGamepad.registerButtonEvent(PP.ButtonType.TOP_BUTTON, PP.ButtonEvent.PRESSED_START, this, this._topButtonPressedStart.bind(this));
-        this._myGamepad.registerButtonEvent(PP.ButtonType.TOP_BUTTON, PP.ButtonEvent.PRESSED_END, this, this._topButtonPressedEnd.bind(this));
+        this._myGamepad.registerButtonEventListener(PP.ButtonType.TOP_BUTTON, PP.ButtonEvent.PRESS_START, this, this._topButtonPressedStart.bind(this));
+        this._myGamepad.registerButtonEventListener(PP.ButtonType.TOP_BUTTON, PP.ButtonEvent.PRESS_END, this, this._topButtonPressedEnd.bind(this));
 
         //TOUCHED
-        this._myGamepad.registerButtonEvent(PP.ButtonType.SELECT, PP.ButtonEvent.TOUCHED_START, this, this._selectTouchedStart.bind(this));
-        this._myGamepad.registerButtonEvent(PP.ButtonType.SELECT, PP.ButtonEvent.TOUCHED_END, this, this._selectTouchedEnd.bind(this));
+        this._myGamepad.registerButtonEventListener(PP.ButtonType.SELECT, PP.ButtonEvent.TOUCH_START, this, this._selectTouchedStart.bind(this));
+        this._myGamepad.registerButtonEventListener(PP.ButtonType.SELECT, PP.ButtonEvent.TOUCH_END, this, this._selectTouchedEnd.bind(this));
 
-        this._myGamepad.registerButtonEvent(PP.ButtonType.SQUEEZE, PP.ButtonEvent.TOUCHED_START, this, this._squeezeTouchedStart.bind(this));
-        this._myGamepad.registerButtonEvent(PP.ButtonType.SQUEEZE, PP.ButtonEvent.TOUCHED_END, this, this._squeezeTouchedEnd.bind(this));
+        this._myGamepad.registerButtonEventListener(PP.ButtonType.SQUEEZE, PP.ButtonEvent.TOUCH_START, this, this._squeezeTouchedStart.bind(this));
+        this._myGamepad.registerButtonEventListener(PP.ButtonType.SQUEEZE, PP.ButtonEvent.TOUCH_END, this, this._squeezeTouchedEnd.bind(this));
 
-        this._myGamepad.registerButtonEvent(PP.ButtonType.THUMBSTICK, PP.ButtonEvent.TOUCHED_START, this, this._thumbstickTouchedStart.bind(this));
-        this._myGamepad.registerButtonEvent(PP.ButtonType.THUMBSTICK, PP.ButtonEvent.TOUCHED_END, this, this._thumbstickTouchedEnd.bind(this));
+        this._myGamepad.registerButtonEventListener(PP.ButtonType.THUMBSTICK, PP.ButtonEvent.TOUCH_START, this, this._thumbstickTouchedStart.bind(this));
+        this._myGamepad.registerButtonEventListener(PP.ButtonType.THUMBSTICK, PP.ButtonEvent.TOUCH_END, this, this._thumbstickTouchedEnd.bind(this));
 
-        this._myGamepad.registerButtonEvent(PP.ButtonType.BOTTOM_BUTTON, PP.ButtonEvent.TOUCHED_START, this, this._bottomButtonTouchedStart.bind(this));
-        this._myGamepad.registerButtonEvent(PP.ButtonType.BOTTOM_BUTTON, PP.ButtonEvent.TOUCHED_END, this, this._bottomButtonTouchedEnd.bind(this));
+        this._myGamepad.registerButtonEventListener(PP.ButtonType.BOTTOM_BUTTON, PP.ButtonEvent.TOUCH_START, this, this._bottomButtonTouchedStart.bind(this));
+        this._myGamepad.registerButtonEventListener(PP.ButtonType.BOTTOM_BUTTON, PP.ButtonEvent.TOUCH_END, this, this._bottomButtonTouchedEnd.bind(this));
 
-        this._myGamepad.registerButtonEvent(PP.ButtonType.TOP_BUTTON, PP.ButtonEvent.TOUCHED_START, this, this._topButtonTouchedStart.bind(this));
-        this._myGamepad.registerButtonEvent(PP.ButtonType.TOP_BUTTON, PP.ButtonEvent.TOUCHED_END, this, this._topButtonTouchedEnd.bind(this));
+        this._myGamepad.registerButtonEventListener(PP.ButtonType.TOP_BUTTON, PP.ButtonEvent.TOUCH_START, this, this._topButtonTouchedStart.bind(this));
+        this._myGamepad.registerButtonEventListener(PP.ButtonType.TOP_BUTTON, PP.ButtonEvent.TOUCH_END, this, this._topButtonTouchedEnd.bind(this));
 
         //VALUE CHANGED
-        this._myGamepad.registerButtonEvent(PP.ButtonType.SQUEEZE, PP.ButtonEvent.VALUE_CHANGED, this, this._squeezeValueChanged.bind(this));
-        this._myGamepad.registerButtonEvent(PP.ButtonType.SELECT, PP.ButtonEvent.VALUE_CHANGED, this, this._selectValueChanged.bind(this));
+        this._myGamepad.registerButtonEventListener(PP.ButtonType.SQUEEZE, PP.ButtonEvent.VALUE_CHANGED, this, this._squeezeValueChanged.bind(this));
+        this._myGamepad.registerButtonEventListener(PP.ButtonType.SELECT, PP.ButtonEvent.VALUE_CHANGED, this, this._selectValueChanged.bind(this));
 
         //AXES CHANGED
-        this._myGamepad.registerAxesEvent(PP.AxesEvent.AXES_CHANGED, this, this._axesValueChanged.bind(this));
+        this._myGamepad.registerAxesEventListener(PP.AxesEvent.AXES_CHANGED, this, this._axesValueChanged.bind(this));
 
         this._myThumbstickInitialLocalForward = this._getLocalAxis(this._myThumbstick, [0, 0, 1]);
         this._myThumbstickForward = [0, 0, 1];

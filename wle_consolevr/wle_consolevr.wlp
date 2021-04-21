@@ -307,8 +307,9 @@
                     }
                 },
                 {
-                    "type": "console-vr-cursor",
-                    "console-vr-cursor": {
+                    "type": "tool-cursor",
+                    "tool-cursor": {
+                        "_myShowFingerCursor": true,
                         "_myCursorMesh": "9",
                         "_myCursorMaterial": "140"
                     }
@@ -344,7 +345,8 @@
                         "material": "32"
                     }
                 }
-            ]
+            ],
+            "parent": "48"
         },
         "50": {
             "link": {
@@ -368,25 +370,29 @@
                 0.00012281164526939392,
                 -0.02525855042040348,
                 1.0
-            ]
+            ],
+            "parent": "48"
         },
         "51": {
             "link": {
                 "name": "Left_Option_Button<Left_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.glb"
-            }
+            },
+            "parent": "48"
         },
         "52": {
             "link": {
                 "name": "Left_Select<Left_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.glb"
-            }
+            },
+            "parent": "48"
         },
         "53": {
             "link": {
                 "name": "Left_Squeeze<Left_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.glb"
-            }
+            },
+            "parent": "48"
         },
         "54": {
             "link": {
@@ -410,13 +416,15 @@
                 -0.00370045006275177,
                 -0.03963407501578331,
                 1.0
-            ]
+            ],
+            "parent": "48"
         },
         "55": {
             "link": {
                 "name": "Left_Top_Button<Left_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.glb"
-            }
+            },
+            "parent": "48"
         },
         "56": {
             "link": {
@@ -443,14 +451,6 @@
                     }
                 },
                 {
-                    "type": "console-vr-cursor",
-                    "console-vr-cursor": {
-                        "_myCursorMesh": "9",
-                        "_myCursorMaterial": "140",
-                        "_myHandedness": "right"
-                    }
-                },
-                {
                     "type": "console-vr",
                     "console-vr": {
                         "_myHandedness": "right",
@@ -460,6 +460,15 @@
                         "_mShowOnStart": false,
                         "_myPulseOnNewMessage": "none"
                     }
+                },
+                {
+                    "type": "tool-cursor",
+                    "tool-cursor": {
+                        "_myHandedness": "right",
+                        "_myShowFingerCursor": true,
+                        "_myCursorMesh": "9",
+                        "_myCursorMaterial": "140"
+                    }
                 }
             ]
         },
@@ -467,43 +476,50 @@
             "link": {
                 "name": "Right_Body<Right_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.glb"
-            }
+            },
+            "parent": "56"
         },
         "58": {
             "link": {
                 "name": "Right_Bottom_Button<Right_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.glb"
-            }
+            },
+            "parent": "56"
         },
         "59": {
             "link": {
                 "name": "Right_Option_Button<Right_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.glb"
-            }
+            },
+            "parent": "56"
         },
         "60": {
             "link": {
                 "name": "Right_Select<Right_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.glb"
-            }
+            },
+            "parent": "56"
         },
         "61": {
             "link": {
                 "name": "Right_Squeeze<Right_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.glb"
-            }
+            },
+            "parent": "56"
         },
         "62": {
             "link": {
                 "name": "Right_Thumbstick<Right_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.glb"
-            }
+            },
+            "parent": "56"
         },
         "63": {
             "link": {
                 "name": "Right_Top_Button<Right_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.glb"
-            }
+            },
+            "parent": "56"
         },
         "64": {
             "name": "Console VR",
@@ -658,7 +674,7 @@
                 6.463337740569841e-7,
                 0.15000082552433018,
                 0.0,
-                3.725289854372704e-9,
+                3.7252898543727044e-9,
                 -2.9802322387695329e-8,
                 -0.010000001639127732,
                 1.0
@@ -970,7 +986,7 @@
                 0.9999988675117492,
                 0.0,
                 -0.0000012032687664031985,
-                -5.80048162279745e-18,
+                -5.8004816227974498e-18,
                 -0.009999999776482582,
                 1.0
             ],
@@ -1058,7 +1074,7 @@
                 0.9999988675117492,
                 0.0,
                 -0.0000012032687664031985,
-                -5.8004816227974498e-18,
+                -5.80048162279745e-18,
                 -0.009999999776482582,
                 1.0
             ],
@@ -1146,7 +1162,7 @@
                 0.9999988675117492,
                 0.0,
                 -0.0000012032687664031985,
-                -5.80048162279745e-18,
+                -5.8004816227974498e-18,
                 -0.009999999776482582,
                 1.0
             ],
@@ -1234,7 +1250,7 @@
                 0.9999988675117492,
                 0.0,
                 -0.0000012032687664031985,
-                -5.8004816227974498e-18,
+                -5.80048162279745e-18,
                 -0.009999999776482582,
                 1.0
             ],
@@ -1322,7 +1338,7 @@
                 0.9999988675117492,
                 0.0,
                 -0.0000012032687664031985,
-                -5.80048162279745e-18,
+                -5.8004816227974498e-18,
                 -0.009999999776482582,
                 1.0
             ],
@@ -1410,7 +1426,7 @@
                 0.9999988675117492,
                 0.0,
                 -0.0000012032687664031985,
-                -5.8004816227974498e-18,
+                -5.80048162279745e-18,
                 -0.009999999776482582,
                 1.0
             ],
@@ -1498,7 +1514,7 @@
                 0.9999988675117492,
                 0.0,
                 -0.0000012032687664031985,
-                -5.80048162279745e-18,
+                -5.8004816227974498e-18,
                 -0.009999999776482582,
                 1.0
             ],
@@ -2705,7 +2721,8 @@
                         "_myPlaneMesh": "7",
                         "_myPlaneMaterial": "139",
                         "_myTextMaterial": "DefaultFontMaterial",
-                        "_myPulseOnNewMessage": "always"
+                        "_myPulseOnNewMessage": "always",
+                        "_myShowOnStart": true
                     }
                 }
             ]
@@ -3142,7 +3159,7 @@
             "version": [
                 0,
                 8,
-                3
+                4
             ]
         },
         "vr": {
@@ -3153,9 +3170,11 @@
             "sourcePaths": [
                 "/js/components/",
                 "js/pp",
-                "js/console-vr",
-                "js/misc",
-                "js/gamepad"
+                "js/cauldron",
+                "js/pp/cauldron",
+                "js/pp/gamepad",
+                "js/pp/tool/cauldron",
+                "js/pp/tool/console-vr"
             ]
         },
         "editor": {

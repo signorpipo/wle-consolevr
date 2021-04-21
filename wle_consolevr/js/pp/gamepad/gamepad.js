@@ -2,7 +2,7 @@
 //you must also add var in front of the enums (like var Handedness = {}) since now they are no longer child of PP
 //and also remove the class assignment to the same name (like ButtonInfo = class ButtonInfo{}) since now they can be global
 
-PP.Handedness =
+PP.GamepadHandedness =
 {
     LEFT: "left",
     RIGHT: "right"
@@ -17,12 +17,12 @@ PP.ButtonType = {
 };
 
 PP.ButtonEvent = {
-    PRESSED_START: 0,
-    PRESSED_END: 1,
+    PRESS_START: 0,
+    PRESS_END: 1,
     PRESSED: 2, //Every frame that it is pressed
     NOT_PRESSED: 3, //Every frame that it is not pressed
-    TOUCHED_START: 4,
-    TOUCHED_END: 5,
+    TOUCH_START: 4,
+    TOUCH_END: 5,
     TOUCHED: 6, //Every frame that it is touched
     NOT_TOUCHED: 7, //Every frame that it is not touched
     VALUE_CHANGED: 8,
@@ -39,6 +39,22 @@ PP.ButtonInfo = class ButtonInfo {
 
         this.myValue = 0.0;
         this.myPrevValue = 0.0;
+    }
+
+    isPressStart() {
+        return this.myIsPressed && !this.myIsPrevPressed;
+    }
+
+    isPressEnd() {
+        return !this.myIsPressed && this.myIsPrevPressed;
+    }
+
+    isTouchStart() {
+        return this.myIsTouched && !this.myIsPrevTouched;
+    }
+
+    isTouchEnd() {
+        return !this.myIsTouched && this.myIsPrevTouched;
     }
 
     clone() {
@@ -97,7 +113,7 @@ PP.PulseData = class PulseData {
 PP.Gamepad = class Gamepad {
 
     /**
-     * @param {PP.Handedness} handedness specifies which controller this gamepad will represent, left or right
+     * @param {PP.GamepadHandedness} handedness specifies which controller this gamepad will represent, left or right
      */
     constructor(handedness) {
         this.myHandedness = handedness;
@@ -147,7 +163,7 @@ PP.Gamepad = class Gamepad {
      * @param id 
      * @param callback callback params are (PP.ButtonInfo, PP.Gamepad)
      */
-    registerButtonEvent(buttonType, buttonEvent, id, callback) {
+    registerButtonEventListener(buttonType, buttonEvent, id, callback) {
         this._myButtonCallbacks[buttonType][buttonEvent].set(id, callback);
     }
 
@@ -156,7 +172,7 @@ PP.Gamepad = class Gamepad {
      * @param {PP.ButtonEvent} buttonEvent 
      * @param id 
      */
-    unregisterButtonEvent(buttonType, buttonEvent, id) {
+    unregisterButtonEventListener(buttonType, buttonEvent, id) {
         this._myButtonCallbacks[buttonType][buttonEvent].delete(id);
     }
 
@@ -172,7 +188,7 @@ PP.Gamepad = class Gamepad {
      * @param id 
      * @param callback callback parameters are (AxesInfo, Gamepad)
      */
-    registerAxesEvent(axesEvent, id, callback) {
+    registerAxesEventListener(axesEvent, id, callback) {
         this._myAxesCallbacks[axesEvent].set(id, callback);
     }
 
@@ -180,7 +196,7 @@ PP.Gamepad = class Gamepad {
      * @param {PP.AxesEvent} axesEvent 
      * @param id 
      */
-    unregisterAxesEvent(axesEvent, id) {
+    unregisterAxesEventListener(axesEvent, id) {
         this._myAxesCallbacks[axesEvent].delete(id);
     }
 
@@ -284,12 +300,12 @@ PP.Gamepad = class Gamepad {
 
             //PRESSED
             if (buttonInfo.myIsPressed && !buttonInfo.myIsPrevPressed) {
-                let callbacksMap = buttonCallbacks[PP.ButtonEvent.PRESSED_START];
+                let callbacksMap = buttonCallbacks[PP.ButtonEvent.PRESS_START];
                 this._triggerCallbacks(callbacksMap, buttonInfo);
             }
 
             if (!buttonInfo.myIsPressed && buttonInfo.myIsPrevPressed) {
-                let callbacksMap = buttonCallbacks[PP.ButtonEvent.PRESSED_END];
+                let callbacksMap = buttonCallbacks[PP.ButtonEvent.PRESS_END];
                 this._triggerCallbacks(callbacksMap, buttonInfo);
             }
 
@@ -303,12 +319,12 @@ PP.Gamepad = class Gamepad {
 
             //TOUCHED
             if (buttonInfo.myIsTouched && !buttonInfo.myIsPrevTouched) {
-                let callbacksMap = buttonCallbacks[PP.ButtonEvent.TOUCHED_START];
+                let callbacksMap = buttonCallbacks[PP.ButtonEvent.TOUCH_START];
                 this._triggerCallbacks(callbacksMap, buttonInfo);
             }
 
             if (!buttonInfo.myIsTouched && buttonInfo.myIsPrevTouched) {
-                let callbacksMap = buttonCallbacks[PP.ButtonEvent.TOUCHED_END];
+                let callbacksMap = buttonCallbacks[PP.ButtonEvent.TOUCH_END];
                 this._triggerCallbacks(callbacksMap, buttonInfo);
             }
 
