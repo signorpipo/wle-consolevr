@@ -19,6 +19,8 @@ Console VR can do so many things! You may want to know some of them:
   - Show and hide the Console VR
   - Get a pulse notification on your gamepad when a new message is received
   - Choose your handedness
+  - Use it with hand tracking
+  - Pin the console
   - Be marvelous
 
 
@@ -33,9 +35,13 @@ From the `console_vr_setup.js` script you can specify, for example:
   - ...
 
 ### Tricks
+  - If you don't want to override the browser console, you can use `PP.ConsoleVR` instead
   - You can show and hide the Console VR by pressing L3 + R3
   - The Console VR can be scrolled by using the left thumbstick
   - If you click (instead of just hovering) on the Up or Down buttons the Console VR will automagically scroll to the top or the bottom
+  - The little square in the corner tells you if a new message has arrived in case you have scrolled and could miss that
+    - You can click the little square to instantly scroll down
+  - You can pin the console through the little `P` button 
 
 
 ### Weaknesses
@@ -43,27 +49,30 @@ There are sadly some things that the marvelous Console VR can't achieve yet, thi
   - Object will be displayed as `\[Object object]`
   - Placeholders like `%d` and other similar kinds of way to build strings are not supported
   - Some messages are not intercepted, like the error from `glMatrix.mat4.invert(null, null)`
+  - If you override the browser console, the link in the browser console related to the position of the log in the code will always refer to the Console VR component
 
 ## How to import
 To import the marvelous Console VR you have to:
-  - Import the `pp` folder into your `project` folder, this folder contains the `pp.js` file with the `PP` namespace declaration in it
-    - This folder should only contain this item
+  - Import the `pp` folder into your `project` folder, along with all the subfolders
+    - This `pp` folder should only contain the `pp.js` file, apart for other folders
     - You must link this folder in the Java Script Sources list (under Project Settings) before any other folders that contain scripts that use the `PP` namespace
     - This is needed to make sure the `PP` namespace is created before it is used 
     - If you put it as first (after `/js/components/`) you should be safe
-  - Import the `console-vr` folder into your `project` folder
   - Add the `console-vr` component to an object
     - You can add it to one of the hands object to have it on your wrist
     - `_myHandedness`: this optimize the rotation and local position of the Console VR based on how you want to use it
+    - `_myOverrideBrowserConsole`: specify if you want to override the browser console
     - `_myShowOnStart`: specify if the Console VR will be visible right from the start
+    - `_myShowVisibilityButton`: specify if you want to show the little visibility button
     - `_myPulseOnNewMessage`: specify if the gamepad should pulse when a new message is logged
-    - `_myPlaneMesh`: set this to `PrimitivePlane`
     - `_myPlaneMaterial`: create a new Flat material from the resources editor panel and add it here
       - to set it as Flat you have to create a new temp mesh object and edit the material from there
       - after creating it you may need to restart the engine
     - `_myTextMaterial`: set this to `DefaultFontMaterial`
-  - Add the `console-vr-cursor` component to one of your hands object
+  - Add the `tool-cursor` component to one of your hands object
     - `_myHandedness`: specify which hands is being used
+    - `_myPulseOnHover`: specify if you want the gamepad to pulse on hover
+    - `_myShowFingerCursor`: specify if you want to show the finger cursor for hand tracking, useful if you don't have a mesh on the hand
     - `_myCursorMesh`: set this to `PrimitiveSphere`
     - `_myCursorMaterial`: set this to the same Flat material created above
 
