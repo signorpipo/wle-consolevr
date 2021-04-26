@@ -8,7 +8,12 @@ WL.registerComponent('tool-cursor', {
     init: function () {
         this._myHandednessString = ['left', 'right'][this._myHandedness];
 
-        this._myCursorPosition = [0.01, -0.024, -0.05];
+        if (this._myHandedness == 0) {
+            this._myCursorPosition = [-0.01, -0.024, -0.05];
+        } else {
+            this._myCursorPosition = [0.01, -0.024, -0.05];
+        }
+
         this._myCursorRotation = [-0.382, 0, 0, 0.924];
         this._myCursorRotation = glMatrix.quat.normalize(this._myCursorRotation, this._myCursorRotation);
         this._myCursorMeshScale = [0.0025, 0.0025, 0.0025];
