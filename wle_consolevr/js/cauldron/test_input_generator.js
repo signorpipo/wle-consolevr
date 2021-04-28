@@ -45,9 +45,13 @@ WL.registerComponent('test-input-generator', {
         }
         if (PP.LeftGamepad.getButtonInfo(PP.ButtonType.TOP_BUTTON).isPressStart()) {
             console.log("Archery log\nasdasdasd\nsdsdsd", "boh");
+            glMatrix.mat4.invert(null, null);
         }
     },
     press: function () {
         this._myConsole.error("Watermelon");
+        //JSON.stringify(a);
+        glMatrix.mat4.invert(null, null);
+        Promise.reject("test");
     }
 });

@@ -17,7 +17,7 @@ PP.ConsoleVRWidget = class ConsoleVRWidget {
 
         this._myMessages = [];
 
-        this._myOldConsole = [];
+        this._myOldBrowserConsole = [];
         this._myOldConsoleVR = [];
 
         this._myTypeFilters = [];
@@ -53,12 +53,12 @@ PP.ConsoleVRWidget = class ConsoleVRWidget {
 
     //This must be done only when all the setup is complete, to avoid issues with other part of the code calling the console and then triggering the console vr while not ready yet
     _overrideConsolesFunctions() {
-        this._myOldConsole[PP.ConsoleVRWidget.ConsoleType.LOG] = console.log;
-        this._myOldConsole[PP.ConsoleVRWidget.ConsoleType.ERROR] = console.error;
-        this._myOldConsole[PP.ConsoleVRWidget.ConsoleType.WARN] = console.warn;
-        this._myOldConsole[PP.ConsoleVRWidget.ConsoleType.INFO] = console.info;
-        this._myOldConsole[PP.ConsoleVRWidget.ConsoleType.DEBUG] = console.debug;
-        this._myOldConsole[PP.ConsoleVRWidget.ConsoleType.ASSERT] = console.assert;
+        this._myOldBrowserConsole[PP.ConsoleVRWidget.ConsoleType.LOG] = console.log;
+        this._myOldBrowserConsole[PP.ConsoleVRWidget.ConsoleType.ERROR] = console.error;
+        this._myOldBrowserConsole[PP.ConsoleVRWidget.ConsoleType.WARN] = console.warn;
+        this._myOldBrowserConsole[PP.ConsoleVRWidget.ConsoleType.INFO] = console.info;
+        this._myOldBrowserConsole[PP.ConsoleVRWidget.ConsoleType.DEBUG] = console.debug;
+        this._myOldBrowserConsole[PP.ConsoleVRWidget.ConsoleType.ASSERT] = console.assert;
 
         if (this._myAdditionalSetup.myOverrideBrowserConsole) {
             console.log = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.LOG, PP.ConsoleVRWidget.SenderType.BROWSER_CONSOLE);
@@ -67,6 +67,14 @@ PP.ConsoleVRWidget = class ConsoleVRWidget {
             console.info = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.INFO, PP.ConsoleVRWidget.SenderType.BROWSER_CONSOLE);
             console.debug = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.DEBUG, PP.ConsoleVRWidget.SenderType.BROWSER_CONSOLE);
             console.assert = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.ASSERT, PP.ConsoleVRWidget.SenderType.BROWSER_CONSOLE);
+
+            window.addEventListener('error', function (errorEvent) {
+                this._consolePrint(PP.ConsoleVRWidget.ConsoleType.ERROR, PP.ConsoleVRWidget.SenderType.WINDOW, "Uncaught", errorEvent.error.stack);
+            }.bind(this));
+
+            window.addEventListener('unhandledrejection', function (errorEvent) {
+                this._consolePrint(PP.ConsoleVRWidget.ConsoleType.ERROR, PP.ConsoleVRWidget.SenderType.WINDOW, "Uncaught (in promise)", errorEvent.reason);
+            }.bind(this));
         }
 
         this._myOldConsoleVR[PP.ConsoleVRWidget.ConsoleType.LOG] = PP.ConsoleVR.log;
@@ -201,10 +209,12 @@ PP.ConsoleVRWidget = class ConsoleVRWidget {
 
         switch (senderType) {
             case PP.ConsoleVRWidget.SenderType.BROWSER_CONSOLE:
-                this._myOldConsole[consoleType].apply(console, args);
+                this._myOldBrowserConsole[consoleType].apply(console, args);
                 break;
             case PP.ConsoleVRWidget.SenderType.CONSOLE_VR:
                 this._myOldConsoleVR[consoleType].apply(PP.ConsoleVR, args);
+                break;
+            default:
                 break;
         }
     }
@@ -664,7 +674,8 @@ PP.ConsoleVRWidget.ConsoleType = {
 
 PP.ConsoleVRWidget.SenderType = {
     BROWSER_CONSOLE: 0,
-    CONSOLE_VR: 1
+    CONSOLE_VR: 1,
+    WINDOW: 2
 };
 
 PP.ConsoleVRWidget.Message = class Message {
