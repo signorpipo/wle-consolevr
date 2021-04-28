@@ -53,43 +53,43 @@ PP.ConsoleVRWidget = class ConsoleVRWidget {
 
     //This must be done only when all the setup is complete, to avoid issues with other part of the code calling the console and then triggering the console vr while not ready yet
     _overrideConsolesFunctions() {
-        this._myOldBrowserConsole[PP.ConsoleVRWidget.ConsoleType.LOG] = console.log;
-        this._myOldBrowserConsole[PP.ConsoleVRWidget.ConsoleType.ERROR] = console.error;
-        this._myOldBrowserConsole[PP.ConsoleVRWidget.ConsoleType.WARN] = console.warn;
-        this._myOldBrowserConsole[PP.ConsoleVRWidget.ConsoleType.INFO] = console.info;
-        this._myOldBrowserConsole[PP.ConsoleVRWidget.ConsoleType.DEBUG] = console.debug;
-        this._myOldBrowserConsole[PP.ConsoleVRWidget.ConsoleType.ASSERT] = console.assert;
+        this._myOldBrowserConsole[PP.ConsoleVRWidget.ConsoleFunction.LOG] = console.log;
+        this._myOldBrowserConsole[PP.ConsoleVRWidget.ConsoleFunction.ERROR] = console.error;
+        this._myOldBrowserConsole[PP.ConsoleVRWidget.ConsoleFunction.WARN] = console.warn;
+        this._myOldBrowserConsole[PP.ConsoleVRWidget.ConsoleFunction.INFO] = console.info;
+        this._myOldBrowserConsole[PP.ConsoleVRWidget.ConsoleFunction.DEBUG] = console.debug;
+        this._myOldBrowserConsole[PP.ConsoleVRWidget.ConsoleFunction.ASSERT] = console.assert;
 
         if (this._myAdditionalSetup.myOverrideBrowserConsole) {
-            console.log = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.LOG, PP.ConsoleVRWidget.SenderType.BROWSER_CONSOLE);
-            console.error = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.ERROR, PP.ConsoleVRWidget.SenderType.BROWSER_CONSOLE);
-            console.warn = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.WARN, PP.ConsoleVRWidget.SenderType.BROWSER_CONSOLE);
-            console.info = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.INFO, PP.ConsoleVRWidget.SenderType.BROWSER_CONSOLE);
-            console.debug = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.DEBUG, PP.ConsoleVRWidget.SenderType.BROWSER_CONSOLE);
-            console.assert = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.ASSERT, PP.ConsoleVRWidget.SenderType.BROWSER_CONSOLE);
+            console.log = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleFunction.LOG, PP.ConsoleVRWidget.Sender.BROWSER_CONSOLE);
+            console.error = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleFunction.ERROR, PP.ConsoleVRWidget.Sender.BROWSER_CONSOLE);
+            console.warn = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleFunction.WARN, PP.ConsoleVRWidget.Sender.BROWSER_CONSOLE);
+            console.info = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleFunction.INFO, PP.ConsoleVRWidget.Sender.BROWSER_CONSOLE);
+            console.debug = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleFunction.DEBUG, PP.ConsoleVRWidget.Sender.BROWSER_CONSOLE);
+            console.assert = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleFunction.ASSERT, PP.ConsoleVRWidget.Sender.BROWSER_CONSOLE);
 
             window.addEventListener('error', function (errorEvent) {
-                this._consolePrint(PP.ConsoleVRWidget.ConsoleType.ERROR, PP.ConsoleVRWidget.SenderType.WINDOW, "Uncaught", errorEvent.error.stack);
+                this._consolePrint(PP.ConsoleVRWidget.ConsoleFunction.ERROR, PP.ConsoleVRWidget.Sender.WINDOW, "Uncaught", errorEvent.error.stack);
             }.bind(this));
 
             window.addEventListener('unhandledrejection', function (errorEvent) {
-                this._consolePrint(PP.ConsoleVRWidget.ConsoleType.ERROR, PP.ConsoleVRWidget.SenderType.WINDOW, "Uncaught (in promise)", errorEvent.reason);
+                this._consolePrint(PP.ConsoleVRWidget.ConsoleFunction.ERROR, PP.ConsoleVRWidget.Sender.WINDOW, "Uncaught (in promise)", errorEvent.reason);
             }.bind(this));
         }
 
-        this._myOldConsoleVR[PP.ConsoleVRWidget.ConsoleType.LOG] = PP.ConsoleVR.log;
-        this._myOldConsoleVR[PP.ConsoleVRWidget.ConsoleType.ERROR] = PP.ConsoleVR.error;
-        this._myOldConsoleVR[PP.ConsoleVRWidget.ConsoleType.WARN] = PP.ConsoleVR.warn;
-        this._myOldConsoleVR[PP.ConsoleVRWidget.ConsoleType.INFO] = PP.ConsoleVR.info;
-        this._myOldConsoleVR[PP.ConsoleVRWidget.ConsoleType.DEBUG] = PP.ConsoleVR.debug;
-        this._myOldConsoleVR[PP.ConsoleVRWidget.ConsoleType.ASSERT] = PP.ConsoleVR.assert;
+        this._myOldConsoleVR[PP.ConsoleVRWidget.ConsoleFunction.LOG] = PP.ConsoleVR.log;
+        this._myOldConsoleVR[PP.ConsoleVRWidget.ConsoleFunction.ERROR] = PP.ConsoleVR.error;
+        this._myOldConsoleVR[PP.ConsoleVRWidget.ConsoleFunction.WARN] = PP.ConsoleVR.warn;
+        this._myOldConsoleVR[PP.ConsoleVRWidget.ConsoleFunction.INFO] = PP.ConsoleVR.info;
+        this._myOldConsoleVR[PP.ConsoleVRWidget.ConsoleFunction.DEBUG] = PP.ConsoleVR.debug;
+        this._myOldConsoleVR[PP.ConsoleVRWidget.ConsoleFunction.ASSERT] = PP.ConsoleVR.assert;
 
-        PP.ConsoleVR.log = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.LOG, PP.ConsoleVRWidget.SenderType.CONSOLE_VR);
-        PP.ConsoleVR.error = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.ERROR, PP.ConsoleVRWidget.SenderType.CONSOLE_VR);
-        PP.ConsoleVR.warn = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.WARN, PP.ConsoleVRWidget.SenderType.CONSOLE_VR);
-        PP.ConsoleVR.info = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.INFO, PP.ConsoleVRWidget.SenderType.CONSOLE_VR);
-        PP.ConsoleVR.debug = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.DEBUG, PP.ConsoleVRWidget.SenderType.CONSOLE_VR);
-        PP.ConsoleVR.assert = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.ASSERT, PP.ConsoleVRWidget.SenderType.CONSOLE_VR);
+        PP.ConsoleVR.log = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleFunction.LOG, PP.ConsoleVRWidget.Sender.CONSOLE_VR);
+        PP.ConsoleVR.error = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleFunction.ERROR, PP.ConsoleVRWidget.Sender.CONSOLE_VR);
+        PP.ConsoleVR.warn = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleFunction.WARN, PP.ConsoleVRWidget.Sender.CONSOLE_VR);
+        PP.ConsoleVR.info = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleFunction.INFO, PP.ConsoleVRWidget.Sender.CONSOLE_VR);
+        PP.ConsoleVR.debug = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleFunction.DEBUG, PP.ConsoleVRWidget.Sender.CONSOLE_VR);
+        PP.ConsoleVR.assert = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleFunction.ASSERT, PP.ConsoleVRWidget.Sender.CONSOLE_VR);
     }
 
     update(dt) {
@@ -193,9 +193,9 @@ PP.ConsoleVRWidget = class ConsoleVRWidget {
         this._myUI.myMessagesTextComponents[messageType].text = consoleText;
     }
 
-    _consolePrint(consoleType, senderType, ...args) {
-        if (consoleType != PP.ConsoleVRWidget.ConsoleType.ASSERT || (args.length > 0 && !args[0])) {
-            let message = this._argsToMessage(consoleType, ...args);
+    _consolePrint(consoleFunction, sender, ...args) {
+        if (consoleFunction != PP.ConsoleVRWidget.ConsoleFunction.ASSERT || (args.length > 0 && !args[0])) {
+            let message = this._argsToMessage(consoleFunction, ...args);
             this._addMessage(message);
 
             if (this._myMessages.length >= this._mySetup.myMaxMessages + this._mySetup.myMaxMessagesDeletePad) {
@@ -207,39 +207,25 @@ PP.ConsoleVRWidget = class ConsoleVRWidget {
             this._pulseGamepad();
         }
 
-        switch (senderType) {
-            case PP.ConsoleVRWidget.SenderType.BROWSER_CONSOLE:
-                this._myOldBrowserConsole[consoleType].apply(console, args);
+        switch (sender) {
+            case PP.ConsoleVRWidget.Sender.BROWSER_CONSOLE:
+                this._myOldBrowserConsole[consoleFunction].apply(console, args);
                 break;
-            case PP.ConsoleVRWidget.SenderType.CONSOLE_VR:
-                this._myOldConsoleVR[consoleType].apply(PP.ConsoleVR, args);
+            case PP.ConsoleVRWidget.Sender.CONSOLE_VR:
+                this._myOldConsoleVR[consoleFunction].apply(PP.ConsoleVR, args);
                 break;
             default:
                 break;
         }
     }
 
-    _consoleTypeToMessageType(consoleType) {
-        let messageType = PP.ConsoleVRWidget.MessageType.LOG;
-
-        if (consoleType < PP.ConsoleVRWidget.ConsoleType.DEBUG) {
-            messageType = consoleType;
-        } else if (consoleType == PP.ConsoleVRWidget.ConsoleType.DEBUG) {
-            messageType = PP.ConsoleVRWidget.MessageType.LOG;
-        } else {
-            messageType = PP.ConsoleVRWidget.MessageType.ERROR;
-        }
-
-        return messageType;
-    }
-
-    _argsToMessage(consoleType, ...args) {
-        if (consoleType == PP.ConsoleVRWidget.ConsoleType.ASSERT) {
+    _argsToMessage(consoleFunction, ...args) {
+        if (consoleFunction == PP.ConsoleVRWidget.ConsoleFunction.ASSERT) {
             args = args.slice(1);
             args.splice(0, 0, this._mySetup.myAssertStartString);
         }
 
-        let messageType = this._consoleTypeToMessageType(consoleType);
+        let messageType = this._consoleFunctionToMessageType(consoleFunction);
 
         let formattedText = this._formatArgs(...args);
 
@@ -255,6 +241,20 @@ PP.ConsoleVRWidget = class ConsoleVRWidget {
         let message = new PP.ConsoleVRWidget.Message(messageType, lines);
 
         return message;
+    }
+
+    _consoleFunctionToMessageType(consoleFunction) {
+        let messageType = PP.ConsoleVRWidget.MessageType.LOG;
+
+        if (consoleFunction < PP.ConsoleVRWidget.ConsoleFunction.DEBUG) {
+            messageType = consoleFunction;
+        } else if (consoleFunction == PP.ConsoleVRWidget.ConsoleFunction.DEBUG) {
+            messageType = PP.ConsoleVRWidget.MessageType.LOG;
+        } else {
+            messageType = PP.ConsoleVRWidget.MessageType.ERROR;
+        }
+
+        return messageType;
     }
 
     //Here the formatting using placeholder like %d could be implemented in the future
@@ -655,15 +655,7 @@ PP.ConsoleVRWidget = class ConsoleVRWidget {
     }
 };
 
-PP.ConsoleVRWidget.MessageType = {
-    INFO: 0,
-    WARN: 1,
-    ERROR: 2,
-    LOG: 3
-};
-
-
-PP.ConsoleVRWidget.ConsoleType = {
+PP.ConsoleVRWidget.ConsoleFunction = {
     INFO: 0,
     WARN: 1,
     ERROR: 2,
@@ -672,10 +664,23 @@ PP.ConsoleVRWidget.ConsoleType = {
     ASSERT: 5
 };
 
-PP.ConsoleVRWidget.SenderType = {
+PP.ConsoleVRWidget.Sender = {
     BROWSER_CONSOLE: 0,
     CONSOLE_VR: 1,
     WINDOW: 2
+};
+
+PP.ConsoleVRWidget.PulseOnNewMessage = {
+    NONE: 0,
+    ALWAYS: 1,
+    WHEN_HIDDEN: 2,
+};
+
+PP.ConsoleVRWidget.MessageType = {
+    INFO: 0,
+    WARN: 1,
+    ERROR: 2,
+    LOG: 3
 };
 
 PP.ConsoleVRWidget.Message = class Message {
@@ -701,12 +706,6 @@ PP.ConsoleVRWidget.Message = class Message {
         text = countString.concat(text);
         this.myLines = text.split("\n");
     }
-};
-
-PP.ConsoleVRWidget.PulseOnNewMessage = {
-    NONE: 0,
-    ALWAYS: 1,
-    WHEN_HIDDEN: 2,
 };
 
 PP.ConsoleVR = {
