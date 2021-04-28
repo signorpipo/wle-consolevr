@@ -61,12 +61,12 @@ PP.ConsoleVRWidget = class ConsoleVRWidget {
         this._myOldConsole[PP.ConsoleVRWidget.ConsoleType.ASSERT] = console.assert;
 
         if (this._myAdditionalSetup.myOverrideBrowserConsole) {
-            console.log = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.LOG, false);
-            console.error = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.ERROR, false);
-            console.warn = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.WARN, false);
-            console.info = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.INFO, false);
-            console.debug = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.DEBUG, false);
-            console.assert = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.ASSERT, false);
+            console.log = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.LOG, PP.ConsoleVRWidget.SenderType.BROWSER_CONSOLE);
+            console.error = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.ERROR, PP.ConsoleVRWidget.SenderType.BROWSER_CONSOLE);
+            console.warn = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.WARN, PP.ConsoleVRWidget.SenderType.BROWSER_CONSOLE);
+            console.info = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.INFO, PP.ConsoleVRWidget.SenderType.BROWSER_CONSOLE);
+            console.debug = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.DEBUG, PP.ConsoleVRWidget.SenderType.BROWSER_CONSOLE);
+            console.assert = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.ASSERT, PP.ConsoleVRWidget.SenderType.BROWSER_CONSOLE);
         }
 
         this._myOldConsoleVR[PP.ConsoleVRWidget.ConsoleType.LOG] = PP.ConsoleVR.log;
@@ -76,12 +76,12 @@ PP.ConsoleVRWidget = class ConsoleVRWidget {
         this._myOldConsoleVR[PP.ConsoleVRWidget.ConsoleType.DEBUG] = PP.ConsoleVR.debug;
         this._myOldConsoleVR[PP.ConsoleVRWidget.ConsoleType.ASSERT] = PP.ConsoleVR.assert;
 
-        PP.ConsoleVR.log = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.LOG, true);
-        PP.ConsoleVR.error = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.ERROR, true);
-        PP.ConsoleVR.warn = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.WARN, true);
-        PP.ConsoleVR.info = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.INFO, true);
-        PP.ConsoleVR.debug = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.DEBUG, true);
-        PP.ConsoleVR.assert = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.ASSERT, true);
+        PP.ConsoleVR.log = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.LOG, PP.ConsoleVRWidget.SenderType.CONSOLE_VR);
+        PP.ConsoleVR.error = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.ERROR, PP.ConsoleVRWidget.SenderType.CONSOLE_VR);
+        PP.ConsoleVR.warn = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.WARN, PP.ConsoleVRWidget.SenderType.CONSOLE_VR);
+        PP.ConsoleVR.info = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.INFO, PP.ConsoleVRWidget.SenderType.CONSOLE_VR);
+        PP.ConsoleVR.debug = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.DEBUG, PP.ConsoleVRWidget.SenderType.CONSOLE_VR);
+        PP.ConsoleVR.assert = this._consolePrint.bind(this, PP.ConsoleVRWidget.ConsoleType.ASSERT, PP.ConsoleVRWidget.SenderType.CONSOLE_VR);
     }
 
     update(dt) {
@@ -185,7 +185,7 @@ PP.ConsoleVRWidget = class ConsoleVRWidget {
         this._myUI.myMessagesTextComponents[messageType].text = consoleText;
     }
 
-    _consolePrint(consoleType, isConsoleVR, ...args) {
+    _consolePrint(consoleType, senderType, ...args) {
         if (consoleType != PP.ConsoleVRWidget.ConsoleType.ASSERT || (args.length > 0 && !args[0])) {
             let message = this._argsToMessage(consoleType, ...args);
             this._addMessage(message);
@@ -199,10 +199,13 @@ PP.ConsoleVRWidget = class ConsoleVRWidget {
             this._pulseGamepad();
         }
 
-        if (isConsoleVR) {
-            this._myOldConsoleVR[consoleType].apply(PP.ConsoleVR, args);
-        } else {
-            this._myOldConsole[consoleType].apply(console, args);
+        switch (senderType) {
+            case PP.ConsoleVRWidget.SenderType.BROWSER_CONSOLE:
+                this._myOldConsole[consoleType].apply(console, args);
+                break;
+            case PP.ConsoleVRWidget.SenderType.CONSOLE_VR:
+                this._myOldConsoleVR[consoleType].apply(PP.ConsoleVR, args);
+                break;
         }
     }
 
@@ -246,9 +249,44 @@ PP.ConsoleVRWidget = class ConsoleVRWidget {
 
     //Here the formatting using placeholder like %d could be implemented in the future
     _formatArgs(...args) {
-        let formattedString = args.join(" ");
+        let stringifiedArgs = [];
+        for (let i = 0; i < args.length; i++) {
+            stringifiedArgs.push(this._stringifyItem(args[i]));
+        }
+
+        let formattedString = stringifiedArgs.join(" ");
 
         return formattedString;
+    }
+
+    _stringifyItem(item) {
+        if (typeof item === 'object') {
+            let stringifiedItem = null;
+            let linesBetweenItems = (Array.isArray(item)) ? 0 : 2;
+
+            try {
+                stringifiedItem = JSON.stringify(item, null, linesBetweenItems); //first try with default replacer
+            } catch (error) {
+                let cache = new WeakSet();
+                stringifiedItem = JSON.stringify(item, function (key, value) {
+                    if (typeof value === 'object' && value !== null) {
+                        if (cache.has(value)) {
+                            return "<stringify error: object already stringified>"; //try to avoid circular reference, a repeated object will be caught in this check too sadly
+                        }
+                        cache.add(value);
+                    }
+                    return value;
+                }, linesBetweenItems);
+            }
+
+            if (Array.isArray(item)) {
+                stringifiedItem = stringifiedItem.split(",").join(", ");
+            }
+
+            return stringifiedItem;
+        }
+
+        return item;
     }
 
     _splitLongLines(messageText) {
@@ -622,6 +660,11 @@ PP.ConsoleVRWidget.ConsoleType = {
     LOG: 3,
     DEBUG: 4,
     ASSERT: 5
+};
+
+PP.ConsoleVRWidget.SenderType = {
+    BROWSER_CONSOLE: 0,
+    CONSOLE_VR: 1
 };
 
 PP.ConsoleVRWidget.Message = class Message {
