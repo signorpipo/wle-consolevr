@@ -44,13 +44,12 @@ From the `console_vr_setup.js` script you can specify, for example:
   - You can pin the console through the little `P` button 
 
 
-### Weaknesses
+### Issues
 There are sadly some things that the marvelous Console VR can't achieve yet, this includes:
-  - Object will be displayed as `\[Object object]`
   - Placeholders like `%d` and other similar kinds of way to build strings are not supported
-  - Some messages are not intercepted, like the error from `glMatrix.mat4.invert(null, null)`
+  - Some messages are not intercepted, like uncaught errors
   - If you override the browser console, the link in the browser console related to the position of the log in the code will always refer to the Console VR component
-
+  - When printing an array, all "," substrings are replaced with ", " to add a space between elements, this could also add an extra space to a string stored inside the array if it contains a "," character
 ## How to import
 To import the marvelous Console VR you have to:
   - Import the `pp` folder into your `project` folder, along with all the subfolders
