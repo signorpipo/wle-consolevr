@@ -21,6 +21,13 @@ WL.registerComponent('gamepad-animator', {
         this._myIsTouchedDiffuseButtonColor = null;
         this._myIsTouchedAmbientButtonColor = null;
 
+        this._myThumbstickInitialLocalForward = this._getLocalAxis(this._myThumbstick, [0, 0, 1]);
+        this._myThumbstickForward = [0, 0, 1];
+        this._mySelectForward = [0, 0, 1];
+
+        this._myIsMeshEnabled = false;
+    },
+    start: function () {
         this._mySelectMaterial = this._mySelect.getComponent("mesh").material.clone();
         this._mySelect.getComponent("mesh").material = this._mySelectMaterial;
         this._mySelectPosition = new Float32Array(3);
@@ -99,15 +106,7 @@ WL.registerComponent('gamepad-animator', {
         //AXES CHANGED
         this._myGamepad.registerAxesEventListener(PP.AxesEvent.AXES_CHANGED, this, this._axesValueChanged.bind(this));
 
-        this._myThumbstickInitialLocalForward = this._getLocalAxis(this._myThumbstick, [0, 0, 1]);
-        this._myThumbstickForward = [0, 0, 1];
-        this._mySelectForward = [0, 0, 1];
-
         this.object.scale([0, 0, 0]);
-        this._myIsMeshEnabled = false;
-
-    },
-    start: function () {
     },
     update: function (dt) {
         this._enableMeshInSession();

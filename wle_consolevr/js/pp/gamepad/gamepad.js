@@ -131,6 +131,7 @@ PP.Gamepad = class Gamepad {
         this._mySqueezeEnd = false;
 
         this.mySession = null;
+        this.myInputSource = null;
         this.myGamepad = null;
 
         this._myButtonCallbacks = [];
@@ -477,6 +478,7 @@ PP.Gamepad = class Gamepad {
 
         this.mySession.addEventListener('end', function (event) {
             this.mySession = null;
+            this.myInputSource = null;
             this.myGamepad = null;
         }.bind(this));
 
@@ -484,6 +486,7 @@ PP.Gamepad = class Gamepad {
             if (event.removed) {
                 for (let item of event.removed) {
                     if (item.gamepad == this.myGamepad) {
+                        this.myInputSource = null;
                         this.myGamepad = null;
                     }
                 }
@@ -492,6 +495,7 @@ PP.Gamepad = class Gamepad {
             if (event.added) {
                 for (let item of event.added) {
                     if (item.handedness == this.myHandedness) {
+                        this.myInputSource = item;
                         this.myGamepad = item.gamepad;
                     }
                 }

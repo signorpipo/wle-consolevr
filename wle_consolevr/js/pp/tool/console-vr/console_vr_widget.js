@@ -200,6 +200,7 @@ PP.ConsoleVRWidget = class ConsoleVRWidget {
 
             if (this._myMessages.length >= this._mySetup.myMaxMessages + this._mySetup.myMaxMessagesDeletePad) {
                 this._myMessages = this._myMessages.slice(this._myMessages.length - this._mySetup.myMaxMessages);
+                this._clampScrollOffset();
             }
 
             this._updateAllTexts();
