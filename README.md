@@ -50,7 +50,9 @@ There are sadly some things that the marvelous Console VR can't achieve yet, thi
   - Some messages are not intercepted, probably because they are printed directly onto the browser console without using the console functions
   - If you override the browser console, the link in the browser console related to the position of the log in the code will always refer to the Console VR component
   - When printing an array, all "," substrings are replaced with ", " to add a space between elements, this could also add an extra space to a string stored inside the array if it contains a "," character
-
+  - To avoid filling up the memory, old messages are removed from the Console VR widget after a while
+    - If you have scrolled to look at a specific message and then the message suddenly change it could be because it was removed
+    - You can change how many messages are kept in the `console_vr_widget_setup.js` script
 
 ## How to import
 To import the marvelous Console VR you have to:
@@ -90,6 +92,9 @@ To import the marvelous Console VR you have to:
     - You can find it inside the `assets` folder
     - It can be set as the project font from the Project Settings
     - Luckily the default font does its job too
+
+## License
+You are free to use this in your projects, just remember to credit me somewhere!
 
 ## Credits
 Oculus Quest Controller Models by Jezza3D on Sketchfab with small adjustments made by me.
