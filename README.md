@@ -3,7 +3,7 @@
 <img src="https://github.com/SignorPipo/wle_consolevr/blob/main/extra/showdonttell.gif">
 </p>
 
-## Description
+## Overview
 Have you ever wondered why you need to remove your headset to read the browser console? Well me too, that's why I've created the marvelous Console VR! 
 
 And, you know, you don't even have to call something special, just spam those `console.logs`, and the Console VR will do the work for you! <3
