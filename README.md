@@ -1,3 +1,11 @@
+# :warning: Warning
+
+This project have been deprecated and might no longer work with the latest version of the [Wonderland Engine](https://wonderlandengine.com/).
+
+An updated version of this feature can be found in the [PP library](https://github.com/SignorPipo/wle_pp).
+
+# 
+
 <p align="center">
 <br>
 <img src="https://github.com/SignorPipo/wle_consolevr/blob/main/extra/showdonttell.gif">
